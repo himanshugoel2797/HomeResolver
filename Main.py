@@ -50,6 +50,7 @@ class Device:
     def Update(self, sys, env):
         pass
 
+
 class Sensor:
     name = ""
     value = None
@@ -61,6 +62,7 @@ class Sensor:
     def GetValue(self):
         return self.value
 
+
 class App:
     name = ""
 
@@ -70,6 +72,7 @@ class App:
     # Process app functionality
     def Update(self, systemObj):
         pass
+
 
 class Environment:
     temperature = 20
@@ -135,7 +138,8 @@ class Environment:
         
         self.user_distance += self.user_distance_delta
         self.user_distance_delta = 0
-    
+
+
 class System:
     devices = {}
     sensors = {}
@@ -232,6 +236,7 @@ class HVAC(Device):
         env.UpdatePower(cur_vars["power"]) #Consume power
         env.UpdateTemperature(cur_vars["temperature_delta"]) #Update current temperature
 
+
 class Blind(Device):
     def __init__(self):
         states = ["raised", "lowered"]
@@ -259,7 +264,8 @@ class Blind(Device):
     def Update(self, sys, env):
         cur_vars = self.GetResourceUsage(self.current_state, self.variables)
         env.SetAmbientLightMult(cur_vars["brightness_mult"])
-        
+
+
 class IndoorLight(Device):
     def __init__(self, name):
         states = ["on", "off"]
@@ -287,6 +293,7 @@ class IndoorLight(Device):
         cur_vars = self.GetResourceUsage(self.current_state, self.variables)
         env.UpdatePower(cur_vars["power"]) #Consume power
         env.AddLight(cur_vars["brightness"]) #Update light amount
+
 
 class OutdoorLight(Device):
     def __init__(self, name):
@@ -376,24 +383,28 @@ class Thermometer(Sensor):
         Sensor.__init__(self, "Thermometer", env.temperature)
     def Update(self, sys, env):
         self.value = env.temperature
-        
+
+
 class PresenceSensor(Sensor):
     def __init__(self, env):
         Sensor.__init__(self, "Presence Sensor", env.presence_detected)
     def Update(self, sys, env):
         self.value = env.presence_detected
-        
+
+
 class MotionSensor(Sensor):
     def __init__(self, env):
         Sensor.__init__(self, "Motion Sensor", env.motion_detected)
     def Update(self, sys, env):
         self.value = env.motion_detected
-        
+
+
 class PowerMeter(Sensor):
     def __init__(self, env):
         Sensor.__init__(self, "Power Meter", env.power_consumed_instant)
     def Update(self, sys, env):
         self.value = env.power_consumed_instant
+
 
 class PowerRate(Sensor):
     def __init__(self, env):
@@ -401,23 +412,27 @@ class PowerRate(Sensor):
     def Update(self, sys, env):
         self.value = env.electricity_rate
 
+
 class UserLocator(Sensor):
     def __init__(self, env):
         Sensor.__init__(self, "User Locator", env.user_distance)
     def Update(self, sys, env):
         self.value = env.user_distance
-        
+
+
 class IndoorBrightnessSensor(Sensor):
     def __init__(self, env):
         Sensor.__init__(self, "Indoor Brightness Sensor", env.light + env.ambient_light * env.ambient_light_mult)
     def Update(self, sys, env):
         self.value = env.light + env.ambient_light * env.ambient_light_mult
-        
+
+
 class OutdoorBrightnessSensor(Sensor):
     def __init__(self, env):
         Sensor.__init__(self, "Outdoor Brightness Sensor", env.ambient_light)
     def Update(self, sys, env):
         self.value = env.ambient_light
+
 
 class SmokeDetector(Sensor):
     def __init__(self, env):
@@ -477,7 +492,8 @@ class SleepCycleManager(App):
                 self.current_state = "sleep_pending"
                 return ["""Submit requests to open all doors"""], [[0, 1, 10]], [0], [], []
         return [], [], [], [], []
-        
+
+
 class LightManager(App):
     current_state = "on_pending"
     def __init__(self, sunset_time, sunrise_time):
@@ -496,13 +512,15 @@ class LightManager(App):
             #Request lights off
             self.current_state = "on_pending"
         return [], [], [], [], []
-        
+
+
 class SleepSecurity(App):
     def __init__(self):
         App.__init__(self, "Sleep Security")
     def Update(self, sys):
         return [], [], [], [], []
-    
+
+
 class IntruderPrevention(App):
     current_state = "on_pending"
     def __init__(self, on_time, off_time):
@@ -519,11 +537,13 @@ class IntruderPrevention(App):
             self.current_state = "on_pending"
             self.transition_counter = 0
         return [], [], [], [], []
-        
+
+
 class FakeActivity(App):
     def __init__(self):
         App.__init__(self, "Fake Activity")
-    
+
+
 class FireSafety(App):
     def __init__(self):
         App.__init__(self, "Sleep Cycle Manager")
@@ -531,7 +551,8 @@ class FireSafety(App):
         if sys.sensors["Smoke Detector"].value:
             return [{"device":"Doors", "target":"closed", "timeout":-1}], [[0, 1, 10]], [0], [], [] #requested_actions, weight_sets, mandatory_actions, alternative_action_pairs, exclusive_action_pairs
         return [], [], [], [], []
-    
+
+
 class HVACLocationControl(App):
     def __init__(self, target_temp):
         App.__init__(self, "HVAC Location Control")
@@ -558,7 +579,8 @@ class HVACLocationControl(App):
             hvac_tot = [(cur_temp - self.target_temp) / hvac_props_h[x].temperature_delta for x in range(4)]
         
         return actions, weights, [], alt_actions, []
-    
+
+
 class EnergyManagement(App):
     #Track total energy bill
     #Apply strict power constraint based on that
@@ -566,7 +588,8 @@ class EnergyManagement(App):
         App.__init__(self, "Energy Management")
     def Update(self, sys):
         return [], [], [], [], []
-    
+
+
 class BatteryBackupManagement(App):
     #Request optional charging when close to lowest
     #Offer to supply when close to highest
@@ -574,13 +597,15 @@ class BatteryBackupManagement(App):
         App.__init__(self, "Battery Backup Management")
     def Update(self, sys):
         return [], [], [], [], []
-    
+
+
 class HVACPowerControl(App):
     def __init__(self):
         App.__init__(self, "HVAC Power Control")
     def Update(self, sys):
         return [], [], [], [], []
-    
+
+
 class HVACWeatherManagement(App):
     def __init__(self):
         App.__init__(self, "HVAC Weather Management")
