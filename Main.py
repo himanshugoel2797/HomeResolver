@@ -34,7 +34,7 @@ class Device:
     def TransitionState(self, target_state_name):
         if self.current_state != target_state_name and target_state_name in self.states:
             state_change = self.current_state + ":" + target_state_name
-            for k, v in state_changes:
+            for k, v in self.state_changes:
                 if k == state_change:
                     # Use value.
                     break
@@ -169,7 +169,7 @@ class System:
 
     # Print current action set
     def ShowRunningSet(self):
-        print("Current action set: " + action_set + "\n", end = ",")
+        print("Current action set: " + self.action_set + "\n", end=",")
 
     # Run ILP
     # Update action set
@@ -379,7 +379,7 @@ class Doors(Device):
         Device.__init__(self, "Doors", states, state_changes, {}, "closed")
 
     def GetResourceUsage(self, state_trans, variables):
-        pass
+        return {}
 
     def Update(self, sys, env):
         pass
@@ -664,7 +664,7 @@ sys_.RegisterSensor(smoke_detector)
 # In[77]:
 
 
-doors = Device("Doors", states, state_changes, {}, "closed")
+doors = Doors()
 sys_.RegisterDevice(doors)
         
 hvac = HVAC()
