@@ -368,11 +368,21 @@ class BatteryBackup(Device):
                 self.variables["stored"] = 0
                 self.current_state = "idle"
 
-states = ["opened", "closed"]
-state_changes = {
-    "opened:closed": "Closed doors requested",
-    "closed:opened": "Opened doors requested"
-}
+
+class Doors(Device):
+    def __init__(self):
+        states = ["opened", "closed"]
+        state_changes = {
+            "opened:closed": "Closed doors requested",
+            "closed:opened": "Opened doors requested"
+        }
+        Device.__init__(self, "Doors", states, state_changes, {}, "closed")
+
+    def GetResourceUsage(self, state_trans, variables):
+        pass
+
+    def Update(self, sys, env):
+        pass
 
 
 # In[73]:
