@@ -18,7 +18,7 @@ class BatteryBackup(Device):
         }
         Device.__init__(self, "Battery Backup", states, state_changes, variables, "idle")
 
-    def get_resource_usage(state_trans, variables):
+    def get_resource_usage(self, state_trans, variables):
         return {
             "capacity": 20000 * 60 * 60,  # 20kWh
             "charging_rate": 1000,  # 1kW
