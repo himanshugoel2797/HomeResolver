@@ -8,5 +8,5 @@ class FireSafety(App):
     def update(self, sys):
         if sys.sensors["Smoke Detector"].value:
             # requested_actions, weight_sets, mandatory_actions, contradicting_action_pairs, dependent_action_pairs, alternative_actions
-            return [{"device": "Doors", "target": "opened", "timeout": -1}], [[0, 1, 10]], [0], [], [], []
+            return [{"device": "Doors", "target": "opened"}], [[0, 10, 10]], [0], [], [], []
         return [], [], [], [], [], []

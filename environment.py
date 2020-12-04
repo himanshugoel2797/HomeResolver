@@ -61,8 +61,6 @@ class Environment:
 
         self.electricity_rate = 0.115 / (60 * 60 * 1000) * \
                                 (1 + (0.5 * math.sin(self.time * math.pi / (12 * 60 * 60)) + 0.5) * 0.3)
-        if self.electricity_rate != self.electricity_rate_delta:
-            self.electricity_rate = self.electricity_rate_delta
-
+        
         self.user_distance += self.user_distance_delta
         self.user_distance_delta = 0

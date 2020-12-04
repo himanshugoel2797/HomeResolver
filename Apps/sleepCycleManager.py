@@ -20,17 +20,10 @@ class SleepCycleManager(App):
             # Set system to sleep pending
             self.transition_counter += 1
             # Slowly raise blinds
-            if self.transition_counter == 1:
-                return ["""Submit requests to open all doors"""], [[0, 1, 10]], [0], [], []
-            elif self.transition_counter == 2:
-                return ["""Submit requests to open all doors"""], [[0, 1, 10]], [0], [], []
-            elif self.transition_counter == 3:
-                return ["""Submit requests to open all doors"""], [[0, 1, 10]], [0], [], []
-            elif self.transition_counter == 4:
-                return ["""Submit requests to open all doors"""], [[0, 1, 10]], [0], [], []
-            elif self.transition_counter == 5:
+            if self.transition_counter == 50:
                 self.current_state = "sleep_pending"
-                return ["""Submit requests to open all doors"""], [[0, 1, 10]], [0], [], []
+            
+            return [{"device": "Blinds", "target": "raised_%d" % (self.transition_counter / 10)}], [[0, self.transition_counter / 10, 2]], [], [], [], []
         elif self.current_state == "sleep_pending" and sys.rounded_time >= self.sleep_time:
             # Transition to sleep mode
             self.current_state = "sleep_processing"
@@ -39,15 +32,8 @@ class SleepCycleManager(App):
             # Set system to wake pending
             self.transition_counter += 1
             # Slowly lower blinds
-            if self.transition_counter == 1:
-                return ["""Submit requests to open all doors"""], [[0, 1, 10]], [0], [], []
-            elif self.transition_counter == 2:
-                return ["""Submit requests to open all doors"""], [[0, 1, 10]], [0], [], []
-            elif self.transition_counter == 3:
-                return ["""Submit requests to open all doors"""], [[0, 1, 10]], [0], [], []
-            elif self.transition_counter == 4:
-                return ["""Submit requests to open all doors"""], [[0, 1, 10]], [0], [], []
-            elif self.transition_counter == 5:
+            if self.transition_counter == 50:
                 self.current_state = "sleep_pending"
-                return ["""Submit requests to open all doors"""], [[0, 1, 10]], [0], [], []
-        return [], [], [], [], []
+            
+            return [{"device": "Blinds", "target": "lowered_%d" % (self.transition_counter / 10)}], [[0, self.transition_counter / 10, 5]], [], [], [], []
+        return [], [], [], [], [], []

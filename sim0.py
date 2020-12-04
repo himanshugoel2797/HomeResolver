@@ -110,8 +110,8 @@ sys_.register_app(intruder_prev)
 light_man = LightManager(19 * 60 * 60, 5 * 60 * 60)
 sys_.register_app(light_man)
 
-#sleep_cycle = SleepCycleManager(0 * 60 * 60, 8 * 60 * 60)
-#sys_.register_app(sleep_cycle)
+sleep_cycle = SleepCycleManager(0 * 60 * 60, 8 * 60 * 60)
+sys_.register_app(sleep_cycle)
 
 sleep_sec = SleepSecurity()
 sys_.register_app(sleep_sec)
@@ -120,12 +120,14 @@ sys_.register_app(sleep_sec)
 #Setup sleep sensor
 #Setup interior temperature to higher than set point
 
+sys_.show_current_state()
+
 #Run simulation step
 env.update()
 sys_.process()
 
 #Print action sets
-
+sys_.show_current_state()
 
 #Trigger smoke detector
 

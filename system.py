@@ -29,8 +29,14 @@ class System:
         self.apps[obj.name] = obj
 
     # Print current action set
-    def show_running_set(self):
-        print("Current action set: " + self.action_set + "\n", end=",")
+    def show_current_state(self):
+        print("At time %d.%d.%d :" % (self.rounded_time / (60 * 60), (self.rounded_time / 60) % 60, (self.rounded_time % 60)))
+        print("\tSensors:")
+        for n, o in self.sensors.items():
+            print ("\t\t%s = %s" % (n, o.value))
+        print("\tDevices:")
+        for n, o in self.devices.items():
+            print ("\t\t%s = %s" % (n, o.current_state))
 
     @staticmethod
     def action_isduplicate(a0, a1):
@@ -149,20 +155,22 @@ class System:
 
         # Define cost function
         cost = None
-        cost_i = 0
+        cost_i = False
         for j in range(len(self.resource_weights)):
             c = None
+            c_i = False
             act_idx = 0
             for i in range(len(requested_actions)):
                 if requested_actions[i] != None:
-                    if c == None:
+                    if not c_i:
                         c = mu[act_idx] * weights[act_idx][j]
+                        c_i = True
                     else:
                         c += mu[act_idx] * weights[act_idx][j]
                     act_idx += 1
-            if cost_i == 0:
+            if not cost_i:
                 cost = c * self.resource_weights[j]
-                cost_i += 1
+                cost_i = True
             else:
                 cost += c * self.resource_weights[j]
 
@@ -176,8 +184,7 @@ class System:
         for act_idx in range(len(running_actions)):
             if requested_actions[act_idx] != None:
                 if running_actions[act_cntr] == 1:
-                    # submit action
-                    pass
+                    self.devices[requested_actions[act_idx]["device"]].transition_state(requested_actions[act_idx]["target"]) # submit action
                 act_cntr += 1
 
         # Update all devices and sensors
