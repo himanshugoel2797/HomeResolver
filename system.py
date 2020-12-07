@@ -9,7 +9,8 @@ class System:
     resource_weights = [-1, 1, 1]
     time = 0
     rounded_time = 0
-    target_temperature = 20
+    target_temperature_present = 20
+    target_temperature_absent = 20
     power_limited = False
     power_limit = 0
 

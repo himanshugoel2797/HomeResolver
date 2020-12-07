@@ -83,7 +83,7 @@ sys_.register_device(lightsIndoor)
 batteryBackup = BatteryBackup()
 sys_.register_device(batteryBackup)
 
-batt_backup_man = BatteryBackupManagement(0.115 / (60 * 60 * 1000), 0.13 / (60 * 60 * 1000))
+batt_backup_man = BatteryBackupManagement(0.115 / (60 * 60 * 1000), 0.2 / (60 * 60 * 1000))
 sys_.register_app(batt_backup_man)
 
 energy_man = EnergyManagement(100)
@@ -95,11 +95,11 @@ sys_.register_app(energy_man)
 fire_safety = FireSafety()
 sys_.register_app(fire_safety)
 
-#hvac_loc = HVACLocationControl(20)
-#sys_.register_app(hvac_loc)
+hvac_loc = HVACLocationControl()
+sys_.register_app(hvac_loc)
 
-#hvac_power = HVACPowerControl()
-#sys_.register_app(hvac_power)
+hvac_power = HVACPowerControl()
+sys_.register_app(hvac_power)
 
 #hvac_weather = HVACWeatherManagement()
 #sys_.register_app(hvac_weather)
