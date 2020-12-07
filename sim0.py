@@ -83,11 +83,11 @@ sys_.register_device(lightsIndoor)
 batteryBackup = BatteryBackup()
 sys_.register_device(batteryBackup)
 
-#batt_backup_man = BatteryBackupManagement()
-#sys_.register_app(batt_backup_man)
+batt_backup_man = BatteryBackupManagement(0.115 / (60 * 60 * 1000), 0.13 / (60 * 60 * 1000))
+sys_.register_app(batt_backup_man)
 
-#energy_man = EnergyManagement()
-#sys_.register_app(energy_man)
+energy_man = EnergyManagement(100)
+sys_.register_app(energy_man)
 
 #fake_act = FakeActivity()
 #sys_.register_app(fake_act)

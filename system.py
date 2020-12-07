@@ -6,9 +6,13 @@ class System:
     sensors = {}
     apps = {}
     resources = ['power_cost', 'comfort', 'security']
-    resource_weights = [1, 1, 1]
+    resource_weights = [-1, 1, 1]
     time = 0
     rounded_time = 0
+    target_temperature = 20
+    power_limited = False
+    power_limit = 0
+
     
     def __init__(self, env):
         self.env = env
@@ -51,6 +55,13 @@ class System:
                 new_l.append(d)
 
         return len(new_l) == 1
+
+    def set_max_power_limit(self, limit):
+        if self.power_limited:
+            self.power_limit = min(self.power_limit, limit)
+        else:
+            self.power_limited = True
+            self.power_limit = limit
 
     # Update action set
     def process(self):
@@ -152,6 +163,24 @@ class System:
             for idx in range(2, len(e_l)):
                 c += mu[e_l[idx]]
             constraints.append(c <= 1)
+
+        # Create power limit constraint
+        if self.power_limited:
+            c = None
+            c_i = False
+            act_idx = 0
+            for i in range(len(requested_actions)):
+                if requested_actions[i] != None:
+                    if not c_i:
+                        c = mu[act_idx] * weights[act_idx][0]
+                        c_i = True
+                    else:
+                        c += mu[act_idx] * weights[act_idx][0]
+                    act_idx += 1
+            constraints.append(c <= self.power_limit)
+
+            self.power_limited = False
+            self.power_limit = 0
 
         # Define cost function
         cost = None

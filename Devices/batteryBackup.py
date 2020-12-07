@@ -3,7 +3,7 @@ from Devices.device import Device
 
 class BatteryBackup(Device):
     def __init__(self):
-        states = ["charging, supplying, idle"]
+        states = ["charging", "supplying", "idle"]
         state_changes = {
             "idle:charging": "Charging requested",
             "supplying:charging": "Charging requested",
@@ -28,11 +28,12 @@ class BatteryBackup(Device):
         cur_vars = self.get_resource_usage(self.current_state, self.variables)
 
         if self.current_state == "charging":
-            env.update_power(cur_vars["charging_rate"])  # Consume power
+            init_stored = self.variables["stored"]
             self.variables["stored"] += cur_vars["charging_rate"]
             if self.variables["stored"] >= cur_vars["capacity"]:  # Stop charging further
                 self.variables["stored"] = cur_vars["capacity"]
                 self.current_state = "idle"
+            env.update_power(self.variables["stored"] - init_stored)  # Consume power
         elif self.current_state == "supplying":  # Supply as much power as available
             if self.variables["stored"] >= self.variables["consumption"]:
                 self.variables["stored"] -= self.variables["consumption"]
