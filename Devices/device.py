@@ -19,10 +19,9 @@ class Device:
     def transition_state(self, target_state_name):
         if self.current_state != target_state_name and target_state_name in self.states:
             state_change = self.current_state + ":" + target_state_name
-            for k, v in self.state_changes:
+            for k, v in self.state_changes.items():
                 if k == state_change:
-                    # Use value.
-                    break
+                    print ("[%s] %s" % (self.name, v)) # Use value.
             self.current_state = target_state_name
 
     # Set a variable's value

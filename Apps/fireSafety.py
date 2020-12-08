@@ -3,10 +3,10 @@ from Apps.app import App
 
 class FireSafety(App):
     def __init__(self):
-        App.__init__(self, "Sleep Cycle Manager")
+        App.__init__(self, "Fire Safety")
 
     def update(self, sys):
         if sys.sensors["Smoke Detector"].value:
-            # requested_actions, weight_sets, mandatory_actions, alternative_action_pairs, exclusive_action_pairs
-            return [{"device": "Doors", "target": "opened", "timeout": -1}], [[0, 1, 10]], [0], [], []
-        return [], [], [], [], []
+            # requested_actions, weight_sets, mandatory_actions, contradicting_action_pairs, dependent_action_pairs, alternative_actions
+            return [{"device": "Doors", "target": "opened"}], [[0, 10, 10]], [0], [], [], []
+        return [], [], [], [], [], []

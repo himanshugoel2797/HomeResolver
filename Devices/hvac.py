@@ -18,7 +18,7 @@ class HVAC(Device):
         variables = {
             "rate": 1,
         }
-        Device.__init__("HVAC", states, state_changes, variables, "off")
+        Device.__init__(self, "HVAC", states, state_changes, variables, "off")
 
     def get_resource_usage(self, state_trans, variables):
         if state_trans.endswith("heating"):
