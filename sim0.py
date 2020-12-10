@@ -89,8 +89,8 @@ sys_.register_app(batt_backup_man)
 energy_man = EnergyManagement(100)
 sys_.register_app(energy_man)
 
-#fake_act = FakeActivity()
-#sys_.register_app(fake_act)
+fake_act = FakeActivity(19 * 60 * 60, 5 * 60 * 60)
+sys_.register_app(fake_act)
 
 fire_safety = FireSafety()
 sys_.register_app(fire_safety)

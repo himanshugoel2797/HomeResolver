@@ -20,10 +20,10 @@ class IntruderPrevention(App):
             alt_actions = []
             for i in range(5):  # 5 brightness levels
                 req_actions.append({"device": "Outdoor Lights", "target": "on_%d" % (i)})
-                weights.append([sys.devices["Outdoor Lights"].GetResourceUsage("on", {"level":i})["power"], 0, 4 + i])
+                weights.append([sys.devices["Outdoor Lights"].get_resource_usage("on", {"level":i})["power"], 0, 4 + i])
                 
                 req_actions.append({"device": "Outdoor Lights", "target": "motionsensor_%d" % (i)})
-                weights.append([sys.devices["Outdoor Lights"].GetResourceUsage("motionsensor", {"level":i})["power"], 0, 1 + i])
+                weights.append([sys.devices["Outdoor Lights"].get_resource_usage("motionsensor", {"level":i})["power"], 0, 1 + i])
                 
                 alt_actions.append(i * 2 + 0)
                 alt_actions.append(i * 2 + 1)
