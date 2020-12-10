@@ -127,6 +127,8 @@ sys_.register_app(sleep_sec)
 
 sys_.show_current_state()
 
+env.presence_detected = True
+
 env.update()
 sys_.process()
 
@@ -139,5 +141,5 @@ env.smoke_detected = True
 env.update()
 sys_.process()
 
-#Print action sets
+# Print action sets
 sys_.show_current_state()

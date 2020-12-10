@@ -28,7 +28,7 @@ class IntruderPrevention(App):
                 alt_actions.append(i * 2 + 0)
                 alt_actions.append(i * 2 + 1)
 
-            return req_actions, weights, [], [], [], alt_actions
+            return req_actions, weights, [], [], [], [alt_actions]
         elif self.current_state == "off_pending" and sys.rounded_time >= self.off_time:
             # Request lights off
             self.current_state = "on_pending"
