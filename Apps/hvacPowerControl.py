@@ -47,5 +47,3 @@ class HVACPowerControl(App):
             else:
                 return [], [], [], [], [], []
             return actions, weights, [], [], [], [alternative_actions]
-
-        return [], [], [], [], []

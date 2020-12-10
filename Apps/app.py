@@ -6,4 +6,4 @@ class App:
 
     # Process app functionality
     def update(self, system_obj):
-        return [], [], [], [], []
+        return [], [], [], [], [], []

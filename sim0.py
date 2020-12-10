@@ -34,7 +34,8 @@ from system import System
 env = Environment()
 sys_ = System(env)
 
-# Create and register devices and sensors
+# # # # # SENSORS # # # # #
+
 human_presence_sensor = PresenceSensor(env)
 sys_.register_sensor(human_presence_sensor)
 
@@ -65,6 +66,8 @@ sys_.register_sensor(outdoor_brightness)
 smoke_detector = SmokeDetector(env)
 sys_.register_sensor(smoke_detector)
 
+# # # # # DEVICES # # # # #
+
 doors = Doors()
 sys_.register_device(doors)
         
@@ -83,14 +86,16 @@ sys_.register_device(lightsIndoor)
 batteryBackup = BatteryBackup()
 sys_.register_device(batteryBackup)
 
+# # # # # APPS # # # # #
+
 batt_backup_man = BatteryBackupManagement(0.115 / (60 * 60 * 1000), 0.2 / (60 * 60 * 1000))
 sys_.register_app(batt_backup_man)
 
 energy_man = EnergyManagement(100)
 sys_.register_app(energy_man)
 
-#fake_act = FakeActivity()
-#sys_.register_app(fake_act)
+fake_act = FakeActivity(10)
+sys_.register_app(fake_act)
 
 fire_safety = FireSafety()
 sys_.register_app(fire_safety)
@@ -101,8 +106,8 @@ sys_.register_app(hvac_loc)
 hvac_power = HVACPowerControl()
 sys_.register_app(hvac_power)
 
-#hvac_weather = HVACWeatherManagement()
-#sys_.register_app(hvac_weather)
+hvac_weather = HVACWeatherManagement()
+sys_.register_app(hvac_weather)
 
 intruder_prev = IntruderPrevention(20 * 60 * 60, 23 * 60 * 60)
 sys_.register_app(intruder_prev)
@@ -117,16 +122,17 @@ sleep_sec = SleepSecurity()
 sys_.register_app(sleep_sec)
 
 # Configure initial sensor values
-#Setup sleep sensor
-#Setup interior temperature to higher than set point
+# Setup sleep sensor
+# Setup interior temperature to higher than set point
 
 sys_.show_current_state()
 
-#Run simulation step
-env.update()
-sys_.process()
+for i in range(12 * 60 * 60):
+    # Run simulation step
+    env.update()
+    sys_.process()
 
-#Print action sets
+# Print action sets
 sys_.show_current_state()
 
 #Trigger smoke detector

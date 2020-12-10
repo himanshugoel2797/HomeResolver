@@ -15,5 +15,5 @@ class BatteryBackupManagement(App):
         elif sys.sensors["Power Rate"].get_value() >= self.discharge_cutoff_rate:
             pwr_cons = sys.sensors["Power Meter"].get_value()
             sys.devices["Battery Backup"].variables["consumption"] = pwr_cons
-            return [{"device": "Battery Backup", "target": "supplying"}], [[-pwr_cons, 0, 0]], [0], [], [], [] # discharge
+            return [{"device": "Battery Backup", "target": "supplying"}], [[-pwr_cons, 0, 0]], [0], [], [], []  # discharge
         return [], [], [], [], [], []

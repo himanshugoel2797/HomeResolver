@@ -6,4 +6,4 @@ class HVACWeatherManagement(App):
         App.__init__(self, "HVAC Weather Management")
 
     def update(self, sys):
-        return [], [], [], [], []
+        return [], [], [], [], [], []
