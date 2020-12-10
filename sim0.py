@@ -127,18 +127,17 @@ sys_.register_app(sleep_sec)
 
 sys_.show_current_state()
 
-for i in range(12 * 60 * 60):
-    # Run simulation step
-    env.update()
-    sys_.process()
+env.update()
+sys_.process()
 
-# Print action sets
 sys_.show_current_state()
 
-#Trigger smoke detector
+# Trigger smoke detector
+env.smoke_detected = True
 
-#Run simulation step
+# Run simulation step
 env.update()
 sys_.process()
 
 #Print action sets
+sys_.show_current_state()

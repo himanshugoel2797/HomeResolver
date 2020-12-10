@@ -22,7 +22,8 @@ class SleepCycleManager(App):
             # Slowly raise blinds
             if self.transition_counter == 50:
                 self.current_state = "sleep_pending"
-            
+
+            print("[Sleep Cycle Manager] [Blinds] Blinds raised requested")
             return [{"device": "Blinds", "target": "raised_%d" % (self.transition_counter / 10)}], [[0, self.transition_counter / 10, 2]], [], [], [], []
         elif self.current_state == "sleep_pending" and sys.rounded_time >= self.sleep_time:
             # Transition to sleep mode
@@ -34,6 +35,7 @@ class SleepCycleManager(App):
             # Slowly lower blinds
             if self.transition_counter == 50:
                 self.current_state = "sleep_pending"
-            
+
+            print("[Sleep Cycle Manager] [Blinds] Blinds lowered requested")
             return [{"device": "Blinds", "target": "lowered_%d" % (self.transition_counter / 10)}], [[0, self.transition_counter / 10, 5]], [], [], [], []
         return [], [], [], [], [], []
