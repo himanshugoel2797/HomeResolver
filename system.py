@@ -66,6 +66,10 @@ class System:
 
     # Update action set
     def process(self):
+
+        for sense in self.sensors.values():
+            sense.update(self, self.env)
+
         requested_actions = []
         weights = []
         man_actions = []
@@ -138,9 +142,21 @@ class System:
 
         # Remove duplicate conflicts
         man_actions = list(set(man_actions))
-        con_action_pairs = list(set(con_action_pairs))
-        dep_action_pairs = list(set(dep_action_pairs))
-        alt_actions = list(set(alt_actions))
+        
+        con_action_pairs_tmp = []
+        for e in con_action_pairs:
+            con_action_pairs_tmp.append(list(set(e)))
+        con_action_pairs = con_action_pairs_tmp
+
+        dep_action_pairs_tmp = []
+        for e in dep_action_pairs:
+            dep_action_pairs_tmp.append(list(set(e)))
+        dep_action_pairs = dep_action_pairs_tmp
+
+        alt_actions_tmp = []
+        for e in alt_actions:
+            alt_actions_tmp.append(list(set(e)))
+        alt_actions = alt_actions_tmp
 
         # Convert into ILP problem
         mu = cp.Variable(action_cnt, integer=True, boolean=True)  # whether or not the action is to be performed
@@ -220,9 +236,6 @@ class System:
         # Update all devices and sensors
         for dev in self.devices.values():
             dev.update(self, self.env)
-
-        for sense in self.sensors.values():
-            sense.update(self, self.env)
 
         self.time += 1
         self.rounded_time = self.time % (24 * 60 * 60)
