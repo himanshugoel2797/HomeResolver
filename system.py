@@ -76,7 +76,7 @@ class System:
             requested_actions_, weights_, mandatory_actions_, contradicting_action_pairs_, dependent_action_pairs_, alternative_actions_ =\
                 app.update(self)
             
-            #Merge action sets
+            # Merge action sets
             base_idx = len(requested_actions)
             requested_actions += requested_actions_
             weights += weights_

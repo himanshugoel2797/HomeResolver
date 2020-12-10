@@ -7,5 +7,6 @@ class SleepSecurity(App):
 
     def update(self, sys):
         if not sys.sensors["Sleep Sensor"].value:
+            print("[Sleep Security] [Doors] Doors closed requested")
             return [{"device": "Doors", "target": "closed"}], [[0, 9, 10]], [], [], [], []
         return [], [], [], [], [], []

@@ -18,12 +18,14 @@ class FakeActivity(App):
                 self.cur_state = "started"
                 self.counter = 0
             elif self.cur_state == "started" and self.counter < self.wake_duration:
-                #Submit lights on request
+                # Submit lights on request
                 self.counter += 1
+                print("[Fake Activity] [Indoor Lights] Lights on requested")
                 return [{"device": "Indoor Lights", "target": "on"}], [[sys.devices["Indoor Lights"].get_resource_usage("on", None)["power"], 0, 10]], [], [], [], []
             elif self.cur_state == "started" and self.counter >= self.wake_duration:
                 self.cur_state = "start_pending"
-                return [{"device":"Indoor Lights", "target":"off"}], [[0, 0, 10]], [], [], [], []
+                print("[Fake Activity] [Indoor Lights] Lights off requested")
+                return [{"device": "Indoor Lights", "target": "off"}], [[0, 0, 10]], [], [], [], []
         else:
             self.cur_state = "start_pending"
         return [], [], [], [], [], []
