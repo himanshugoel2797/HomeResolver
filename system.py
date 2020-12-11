@@ -95,7 +95,7 @@ class System:
                 s = []
                 for y in x:
                     s.append(y + base_idx)
-                alt_actions.append(set(s))
+                alt_actions.append(s)
 
         # Find duplicate actions
         removed_actions = []
