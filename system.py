@@ -84,7 +84,7 @@ class System:
             base_idx = len(requested_actions)
             requested_actions += requested_actions_
             weights += weights_
-            alt_actions += alternative_actions_
+            #alt_actions += alternative_actions_
 
             man_actions += [x + base_idx for x in mandatory_actions_]
             con_action_pairs += [set([x[0] + base_idx, x[1] + base_idx])
@@ -95,7 +95,7 @@ class System:
                 s = []
                 for y in x:
                     s.append(y + base_idx)
-                alt_actions.append(s)
+                alt_actions.append(set(s))
 
         # Find duplicate actions
         removed_actions = []
@@ -121,45 +121,29 @@ class System:
                 removed_actions.append(d)   # Mark duplicated actions as removed
 
             # Update conflict indices
-            man_actions = [a0 if x in dups else x for x in man_actions]
-            con_action_pairs = [set([a0 if y in dups else y for y in x]) for x in con_action_pairs]
-            dep_action_pairs = [set([a0 if y in dups else y for y in x]) for x in dep_action_pairs]
-            alt_actions = [set([a0 if y in dups else y for y in x]) for x in alt_actions]
+            man_actions = [i0 if x in dups else x for x in man_actions]
+            con_action_pairs = [set([i0 if y in dups else y for y in x]) for x in con_action_pairs]
+            dep_action_pairs = [set([i0 if y in dups else y for y in x]) for x in dep_action_pairs]
+            alt_actions = [set([i0 if y in dups else y for y in x]) for x in alt_actions]
 
         # Remove duplicated actions
-        action_cnt = len(requested_actions)
         for d in removed_actions:
             requested_actions[d] = None
-            action_cnt -= 1
 
         # Different actions executing on the same device are exclusive conflicts
         for i0 in range(len(requested_actions)):
             a0 = requested_actions[i0]
-            for i1 in range(i0 + 1, len(requested_actions)):
-                a1 = requested_actions[i1]
-                if a0["device"] == a1["device"]:
-                    con_action_pairs.append(set([i0, i1]))
+            if a0 != None:
+                for i1 in range(i0 + 1, len(requested_actions)):
+                    a1 = requested_actions[i1]
+                    if a1 != None and a0["device"] == a1["device"]:
+                        con_action_pairs.append(set([i0, i1]))
 
         # Remove duplicate conflicts
         man_actions = list(set(man_actions))
-        
-        con_action_pairs_tmp = []
-        for e in con_action_pairs:
-            con_action_pairs_tmp.append(list(set(e)))
-        con_action_pairs = con_action_pairs_tmp
-
-        dep_action_pairs_tmp = []
-        for e in dep_action_pairs:
-            dep_action_pairs_tmp.append(list(set(e)))
-        dep_action_pairs = dep_action_pairs_tmp
-
-        alt_actions_tmp = []
-        for e in alt_actions:
-            alt_actions_tmp.append(list(set(e)))
-        alt_actions = alt_actions_tmp
 
         # Convert into ILP problem
-        mu = cp.Variable(action_cnt, integer=True, boolean=True)  # whether or not the action is to be performed
+        mu = cp.Variable(len(requested_actions), integer=True, boolean=True)  # whether or not the action is to be performed
         
         # Define constraints
         constraints = []
@@ -226,13 +210,11 @@ class System:
         running_actions = np.round(mu.value)
 
         # Execute actions
-        act_cntr = 0
         for act_idx in range(len(running_actions)):
             if requested_actions[act_idx] != None:
-                if running_actions[act_cntr] == 1:
+                if running_actions[act_idx] == 1:
                     self.devices[requested_actions[act_idx]["device"]].transition_state(requested_actions[act_idx]["target"]) # submit action
-                act_cntr += 1
-
+        
         # Update all devices and sensors
         for dev in self.devices.values():
             dev.update(self, self.env)
