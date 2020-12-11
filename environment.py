@@ -18,6 +18,7 @@ class Environment:
     sleep_detected = False
     user_distance = 0
     user_distance_delta = 0
+    electricity_rate_base = 0.115 / (60 * 60 * 1000)
     electricity_rate = 0.115 / (60 * 60 * 1000)  # $0.115/kWh to $/Ws
     electricity_rate_delta = 0
 
@@ -59,7 +60,7 @@ class Environment:
 
         self.ambient_light_mult = 1
 
-        self.electricity_rate = 0.115 / (60 * 60 * 1000) * \
+        self.electricity_rate = self.electricity_rate_base * \
                                 (1 + (0.5 * math.sin(self.time * math.pi / (12 * 60 * 60)) + 0.5) * 0.3)
         
         self.user_distance += self.user_distance_delta

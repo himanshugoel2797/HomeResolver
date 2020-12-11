@@ -3,12 +3,12 @@ from Devices.device import Device
 
 class OutdoorLight(Device):
     def __init__(self, name):
-        states = ["on", "off", "motion_sensor"]
+        states = ["on", "off", "motionsensor"]
         state_changes = {
             "off:on": "Lights on requested",
             "on:off": "Lights off requested",
-            "off:motionsensor" : "Motion sensor lights requested",
-            "on:motionsensor" : "Motion sensor lights requested",
+            "off:motionsensor": "Motion sensor lights requested",
+            "on:motionsensor": "Motion sensor lights requested",
         }
         variables = {
             "level": 0
