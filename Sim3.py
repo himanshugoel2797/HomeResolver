@@ -69,7 +69,7 @@ sys_.register_sensor(smoke_detector)
 
 doors = Doors()
 sys_.register_device(doors)
-        
+
 hvac = HVAC()
 sys_.register_device(hvac)
 
@@ -105,7 +105,7 @@ sys_.register_app(hvac_loc)
 hvac_power = HVACPowerControl()
 sys_.register_app(hvac_power)
 
-intruder_prev = IntruderPrevention(20 * 60 * 60, 23 * 60 * 60)
+intruder_prev = IntruderPrevention(0 * 60 * 60, 3 * 60 * 60)
 sys_.register_app(intruder_prev)
 
 light_man = LightManager(19 * 60 * 60, 5 * 60 * 60)
@@ -117,27 +117,14 @@ sys_.register_app(sleep_cycle)
 sleep_sec = SleepSecurity()
 sys_.register_app(sleep_sec)
 
-# Configure initial sensor values
-# Setup sleep sensor
-# Setup interior temperature to higher than set point
-
 # # # # # SIMULATION # # # # #
 
 sys_.show_current_state()
 
-env.presence_detected = True
+env.presence_detected = False
+env.motion_detected = True
 
 env.update()
 sys_.process()
 
-sys_.show_current_state()
-
-# Trigger smoke detector
-env.smoke_detected = True
-
-# Run simulation step
-env.update()
-sys_.process()
-
-# Print action sets
 sys_.show_current_state()

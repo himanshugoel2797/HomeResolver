@@ -26,6 +26,7 @@ class HVACLocationControl(App):
             if hvac_tot[0] > 0:
                 return [], [], [], [], [], []
 
+            print("[HVAC Location Control] [HVAC] Cooling requested")
             # Adjust penalties based on time difference till target temperature
             for i in range(4):
                 actions.append({"device": "HVAC", "target": "cooling_%d" % (i + 1)})
@@ -41,6 +42,7 @@ class HVACLocationControl(App):
             if hvac_tot[0] > 0:
                 return [], [], [], [], [], []
 
+            print("[HVAC Location Control] [HVAC] Heating requested")
             # Adjust penalties based on time difference till target temperature
             for i in range(4):
                 actions.append({"device": "HVAC", "target": "heating_%d" % (i + 1)})
