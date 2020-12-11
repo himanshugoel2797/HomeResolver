@@ -13,7 +13,8 @@ class IntruderPrevention(App):
         if self.current_state == "on_pending" and sys.rounded_time >= self.on_time:
             # Request lights on or motion sensing
             self.current_state = "off_pending"
-            # requested_actions, weight_sets, mandatory_actions, contradicting_action_pairs, dependent_action_pairs, alternative_actions
+            # requested_actions, weight_sets, mandatory_actions,
+            # contradicting_action_pairs, dependent_action_pairs, alternative_actions
 
             req_actions = []
             weights = []
@@ -33,6 +34,7 @@ class IntruderPrevention(App):
             # Request lights off
             self.current_state = "on_pending"
             print("[Intruder Prevention] [Outdoor Lights] Lights off requested")
-            # requested_actions, weight_sets, mandatory_actions, contradicting_action_pairs, dependent_action_pairs, alternative_actions
+            # requested_actions, weight_sets, mandatory_actions,
+            # contradicting_action_pairs, dependent_action_pairs, alternative_actions
             return [{"device": "Outdoor Lights", "target": "off"}], [[0, 0, 9]], [], [], [], []
         return [], [], [], [], [], []

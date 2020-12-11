@@ -27,7 +27,6 @@ from Apps.hvacLocationControl import HVACLocationControl
 from Apps.energyManagement import EnergyManagement
 from Apps.batteryBackupManagement import BatteryBackupManagement
 from Apps.hvacPowerControl import HVACPowerControl
-from Apps.hvacWeatherManagement import HVACWeatherManagement
 from environment import Environment
 from system import System
 
@@ -106,9 +105,6 @@ sys_.register_app(hvac_loc)
 hvac_power = HVACPowerControl()
 sys_.register_app(hvac_power)
 
-hvac_weather = HVACWeatherManagement()
-sys_.register_app(hvac_weather)
-
 intruder_prev = IntruderPrevention(0 * 60 * 60, 3 * 60 * 60)
 sys_.register_app(intruder_prev)
 
@@ -121,11 +117,15 @@ sys_.register_app(sleep_cycle)
 sleep_sec = SleepSecurity()
 sys_.register_app(sleep_sec)
 
+# # # # # SIMULATION # # # # #
+
 sys_.show_current_state()
 
 env.presence_detected = True
 env.motion_detected = True
-env.electricity_rate = 0.0575 / (60 * 60 * 1000)
+env.sleep_detected = True
+env.temperature = 40
+env.electricity_rate_base = .0575 / (60 * 60 * 1000)
 
 env.update()
 sys_.process()

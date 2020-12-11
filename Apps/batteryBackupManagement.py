@@ -12,7 +12,7 @@ class BatteryBackupManagement(App):
     def update(self, sys):
         if sys.sensors["Power Rate"].get_value() <= self.charge_cutoff_rate:
             print("[Battery Backup Management] [Battery Backup] charging")
-            return [{"device": "Battery Backup", "target": "charging"}], [[sys.devices["Battery Backup"].get_resource_usage("charging", {})["charging_rate"], 2, 1]], [0], [], [], [] # charge
+            return [{"device": "Battery Backup", "target": "charging"}], [[sys.devices["Battery Backup"].get_resource_usage("charging", {})["charging_rate"], 2, 1]], [0], [], [], []  # charge
         elif sys.sensors["Power Rate"].get_value() >= self.discharge_cutoff_rate:
             pwr_cons = sys.sensors["Power Meter"].get_value()
             sys.devices["Battery Backup"].variables["consumption"] = pwr_cons
