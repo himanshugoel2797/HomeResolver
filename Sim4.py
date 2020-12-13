@@ -30,14 +30,6 @@ from Apps.hvacPowerControl import HVACPowerControl
 from environment import Environment
 from system import System
 
-
-def update():
-    env.update()
-    sys_.process()
-
-    sys_.show_current_state()
-
-
 env = Environment()
 sys_ = System(env)
 
@@ -77,7 +69,7 @@ sys_.register_sensor(smoke_detector)
 
 doors = Doors()
 sys_.register_device(doors)
-        
+
 hvac = HVAC()
 sys_.register_device(hvac)
 
@@ -113,6 +105,9 @@ sys_.register_app(hvac_loc)
 hvac_power = HVACPowerControl()
 sys_.register_app(hvac_power)
 
+hvac_weather = HVACWeatherManagement()
+sys_.register_app(hvac_weather)
+
 intruder_prev = IntruderPrevention(20 * 60 * 60, 23 * 60 * 60)
 sys_.register_app(intruder_prev)
 
@@ -125,19 +120,4 @@ sys_.register_app(sleep_cycle)
 sleep_sec = SleepSecurity()
 sys_.register_app(sleep_sec)
 
-# Configure initial sensor values
-# Setup sleep sensor
-# Setup interior temperature to higher than set point
-
 # # # # # SIMULATION # # # # #
-
-sys_.show_current_state()
-
-env.presence_detected = True
-
-update()
-
-# Trigger smoke detector
-env.smoke_detected = True
-
-update()

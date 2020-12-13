@@ -20,12 +20,14 @@ class HVACLocationControl(App):
         target_temp = sys.target_temperature_present
         if cur_temp > target_temp:
             # Cooling
-            hvac_tot = [(cur_temp - target_temp) / hvac_props_c[x]["temperature_delta"] - time_avail for x in range(4)]
+            hvac_tot = [time_avail - (cur_temp - target_temp) / hvac_props_c[x]["temperature_delta"] for x in range(4)]
 
             # Don't bother if even the lowest cooling rate leads to wasted power
             if hvac_tot[0] > 0:
-                return [], [], [], [], [], []
+                print("[HVAC Location Control] [HVAC] Off requested")
+                return [{"device": "HVAC", "target": "off"}], [[0, 0, 0]], [], [], [], []
 
+            print("[HVAC Location Control] [HVAC] Cooling requested")
             # Adjust penalties based on time difference till target temperature
             for i in range(4):
                 actions.append({"device": "HVAC", "target": "cooling_%d" % (i + 1)})
@@ -39,8 +41,10 @@ class HVACLocationControl(App):
             
             # Don't bother if even the lowest heating rate leads to wasted power
             if hvac_tot[0] > 0:
-                return [], [], [], [], [], []
+                print("[HVAC Location Control] [HVAC] Off requested")
+                return [{"device": "HVAC", "target": "off"}], [[0, 0, 0]], [], [], [], []
 
+            print("[HVAC Location Control] [HVAC] Heating requested")
             # Adjust penalties based on time difference till target temperature
             for i in range(4):
                 actions.append({"device": "HVAC", "target": "heating_%d" % (i + 1)})

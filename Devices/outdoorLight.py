@@ -49,3 +49,4 @@ class OutdoorLight(Device):
                 if k == state_change:
                     print ("[%s] %s, lv: %d" % (self.name, v, lv)) # Use value.
             self.current_state = target_state_name
+            self.variables["level"] = lv

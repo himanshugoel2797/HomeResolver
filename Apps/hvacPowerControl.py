@@ -15,13 +15,15 @@ class HVACPowerControl(App):
 
         if present:
             target = sys.target_temperature_present
-            if cur_temp < target: # Heat
+            if cur_temp < target:  # Heat
+                print("[HVAC Power Control] [HVAC] Heating requested")
                 for i in range(4):
                     actions.append({"device": "HVAC", "target": "heating_%d" % (i + 1)})
                     resources = sys.devices["HVAC"].get_resource_usage("heating", {"rate" : i + 1})
                     weights.append([resources["power"], target - cur_temp, 0])
                     alt_actions.append(i)
             elif cur_temp > target:  # Cool
+                print("[HVAC Power Control] [HVAC] Cooling requested")
                 for i in range(4):
                     actions.append({"device": "HVAC", "target": "cooling_%d" % (i + 1)})
                     resources = sys.devices["HVAC"].get_resource_usage("cooling", {"rate" : i + 1})
@@ -32,13 +34,13 @@ class HVACPowerControl(App):
             return actions, weights, [], [], [], [alt_actions]
         else:
             target = sys.target_temperature_absent
-            if cur_temp < target: # Heat
+            if cur_temp < target:  # Heat
                 for i in range(4):
                     actions.append({"device": "HVAC", "target": "heating_%d" % (i + 1)})
                     resources = sys.devices["HVAC"].get_resource_usage("heating", {"rate" : i + 1})
                     weights.append([resources["power"], target - cur_temp, 0])
                     alt_actions.append(i)
-            elif cur_temp > target: # Cool
+            elif cur_temp > target:  # Cool
                 for i in range(4):
                     actions.append({"device": "HVAC", "target": "cooling_%d" % (i + 1)})
                     resources = sys.devices["HVAC"].get_resource_usage("cooling", {"rate" : i + 1})

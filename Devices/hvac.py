@@ -41,3 +41,15 @@ class HVAC(Device):
         cur_vars = self.get_resource_usage(self.current_state, self.variables)
         env.update_power(cur_vars["power"])  # Consume power
         env.update_temperature(cur_vars["temperature_delta"])  # Update current temperature
+
+    def transition_state(self, target_state_name):
+        parts = target_state_name.split('_')
+        lv = int(parts[1])
+        target_state_name = parts[0]
+        if self.current_state != target_state_name and target_state_name in self.states:
+            state_change = self.current_state + ":" + target_state_name
+            for k, v in self.state_changes.items():
+                if k == state_change:
+                    print("[%s] %s, lv: %d" % (self.name, v, lv)) # Use value.
+            self.current_state = target_state_name
+            self.variables["rate"] = lv

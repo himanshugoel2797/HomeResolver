@@ -15,3 +15,11 @@ class Doors(Device):
 
     def update(self, sys, env):
         pass
+
+    def transition_state(self, target_state_name):
+        if target_state_name in self.states:
+            state_change = self.current_state + ":" + target_state_name
+            for k, v in self.state_changes.items():
+                if k == state_change:
+                    print("[%s] %s" % (self.name, v))  # Use value.
+            self.current_state = target_state_name
