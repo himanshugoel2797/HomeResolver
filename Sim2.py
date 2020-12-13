@@ -30,6 +30,14 @@ from Apps.hvacPowerControl import HVACPowerControl
 from environment import Environment
 from system import System
 
+
+def update():
+    env.update()
+    sys_.process()
+
+    sys_.show_current_state()
+
+
 env = Environment()
 sys_ = System(env)
 
@@ -122,12 +130,7 @@ sys_.register_app(sleep_sec)
 sys_.show_current_state()
 
 env.presence_detected = True
-env.motion_detected = True
-env.sleep_detected = True
 env.temperature = 40
-env.electricity_rate_base = .0575 / (60 * 60 * 1000)
+env.user_distance = 40
 
-env.update()
-sys_.process()
-
-sys_.show_current_state()
+update()

@@ -7,7 +7,7 @@ class System:
     sensors = {}
     apps = {}
     resources = ['power_cost', 'comfort', 'security']
-    resource_weights = [-1, 1, 1]
+    resource_weights = [-1, 5, 25]
     time = 0
     rounded_time = 0
     target_temperature_present = 20

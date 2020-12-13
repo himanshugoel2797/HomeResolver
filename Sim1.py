@@ -30,6 +30,14 @@ from Apps.hvacPowerControl import HVACPowerControl
 from environment import Environment
 from system import System
 
+
+def update():
+    env.update()
+    sys_.process()
+
+    sys_.show_current_state()
+
+
 env = Environment()
 sys_ = System(env)
 
@@ -127,17 +135,9 @@ sys_.show_current_state()
 
 env.presence_detected = True
 
-env.update()
-sys_.process()
-
-sys_.show_current_state()
+update()
 
 # Trigger smoke detector
 env.smoke_detected = True
 
-# Run simulation step
-env.update()
-sys_.process()
-
-# Print action sets
-sys_.show_current_state()
+update()

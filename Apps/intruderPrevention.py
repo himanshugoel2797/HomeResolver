@@ -19,6 +19,9 @@ class IntruderPrevention(App):
             req_actions = []
             weights = []
             alt_actions = []
+
+            print("[Intruder Prevention] [Outdoor Lights] Lights on requested")
+            print("[Intruder Prevention] [Outdoor Lights] Motion sensor requested")
             for i in range(5):  # 5 brightness levels
                 req_actions.append({"device": "Outdoor Lights", "target": "on_%d" % (i)})
                 weights.append([sys.devices["Outdoor Lights"].get_resource_usage("on", {"level":i})["power"], 0, 4 + i])

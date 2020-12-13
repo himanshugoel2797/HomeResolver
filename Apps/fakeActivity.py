@@ -3,29 +3,43 @@ from Apps.app import App
 
 class FakeActivity(App):
     time_on = 0
-    transition_counter_in = 0
-    transition_counter_out = 0
+    counter = 0
     cur_state = "start_pending"
 
-    def __init__(self, start_time, wake_duration):
+    def __init__(self, sunrise_time, sunset_time, time_on, time_off):
         App.__init__(self, "Fake Activity")
-        self.start_time = start_time
-        self.wake_duration = wake_duration
+        self.sunrise_time = sunrise_time
+        self.sunset_time = sunset_time
+        self.time_on = time_on
+        self.time_off = time_off
+        self.counter = time_off
+
+    @staticmethod
+    def on(sys):
+        print("[Fake Activity] [Indoor Lights] Lights on requested")
+        return [{"device": "Indoor Lights", "target": "on"}], \
+               [[sys.devices["Indoor Lights"].get_resource_usage("on", None)["power"], 0, 10]], [], [], [], []
+
+    @staticmethod
+    def off():
+        print("[Fake Activity] [Indoor Lights] Lights off requested")
+        return [{"device": "Indoor Lights", "target": "off"}], [[0, 0, 10]], [], [], [], []
 
     def update(self, sys):
-        if not sys.sensors["Presence Sensor"].value:
-            if self.cur_state == "start_pending" and self.start_time >= sys.rounded_time:
-                self.cur_state = "started"
-                self.counter = 0
-            elif self.cur_state == "started" and self.counter < self.wake_duration:
-                # Submit lights on request
-                self.counter += 1
-                print("[Fake Activity] [Indoor Lights] Lights on requested")
-                return [{"device": "Indoor Lights", "target": "on"}], [[sys.devices["Indoor Lights"].get_resource_usage("on", None)["power"], 0, 10]], [], [], [], []
-            elif self.cur_state == "started" and self.counter >= self.wake_duration:
-                self.cur_state = "start_pending"
-                print("[Fake Activity] [Indoor Lights] Lights off requested")
-                return [{"device": "Indoor Lights", "target": "off"}], [[0, 0, 10]], [], [], [], []
-        else:
-            self.cur_state = "start_pending"
-        return [], [], [], [], [], []
+        if not sys.sensors["Presence Sensor"].value and self.sunset_time >= sys.rounded_time >= self.sunrise_time:
+            if self.cur_state == "start_pending":
+                if self.counter >= self.time_off:
+                    self.cur_state = "started"
+                    self.counter = 0
+                    return self.on(sys)
+                else:
+                    self.counter += 1
+                    return self.off()
+            else:
+                if self.counter >= self.time_on:
+                    self.cur_state = "state_pending"
+                    self.counter = 0
+                    return self.off()
+                else:
+                    self.counter += 1
+                    return self.on(sys)

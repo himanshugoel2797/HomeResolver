@@ -30,6 +30,17 @@ from Apps.hvacPowerControl import HVACPowerControl
 from environment import Environment
 from system import System
 
+
+def update():
+    env.update()
+    sys_.process()
+
+
+def update_print():
+    update()
+    sys_.show_current_state()
+
+
 env = Environment()
 sys_ = System(env)
 
@@ -93,7 +104,7 @@ sys_.register_app(batt_backup_man)
 energy_man = EnergyManagement(100)
 sys_.register_app(energy_man)
 
-fake_act = FakeActivity(19 * 60 * 60, 5 * 60 * 60)
+fake_act = FakeActivity(4 * 60 * 60, 22 * 60 * 60, 15 * 60, 15 * 60)
 sys_.register_app(fake_act)
 
 fire_safety = FireSafety()
@@ -108,7 +119,7 @@ sys_.register_app(hvac_power)
 intruder_prev = IntruderPrevention(0 * 60 * 60, 3 * 60 * 60)
 sys_.register_app(intruder_prev)
 
-light_man = LightManager(19 * 60 * 60, 5 * 60 * 60)
+light_man = LightManager(4 * 60 * 60, 22 * 60 * 60)
 sys_.register_app(light_man)
 
 sleep_cycle = SleepCycleManager(0 * 60 * 60, 8 * 60 * 60)
@@ -124,7 +135,7 @@ sys_.show_current_state()
 env.presence_detected = False
 env.motion_detected = True
 
-env.update()
-sys_.process()
+for i in range(4 * 60 * 60 - 1):
+    update()
 
-sys_.show_current_state()
+update_print()
