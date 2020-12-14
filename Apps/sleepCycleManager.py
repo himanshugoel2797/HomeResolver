@@ -38,6 +38,7 @@ class SleepCycleManager(App):
                 self.current_state = "sleep_pending"
 
             print("[Sleep Cycle Manager] [Blinds] Blinds lowered requested")
-            return [{"device": "Blinds", "target": "lowered_%d" % (self.transition_counter / 10)}], \
-                   [[0, self.transition_counter / 10, 5]], [], [], [], []
+            return [{"device":"Blinds", "target":"lowered_%d" % (self.transition_counter / 10)},
+                    {"device": "Indoor Lights", "target": "off"}], \
+                   [[0, self.transition_counter / 10, 5], [0, 10, 0]], [], [], [[0, 1]], []
         return [], [], [], [], [], []
