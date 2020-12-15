@@ -18,7 +18,8 @@ class FakeActivity(App):
     def on(sys):
         print("[Fake Activity] [Indoor Lights] Lights on requested")
         return [{"device": "Indoor Lights", "target": "on"}], \
-               [[sys.devices["Indoor Lights"].get_resource_usage("on", None)["power"], 0, 10]], [], [], [], []
+               [[sys.devices["Indoor Lights"].get_resource_usage("on", None)["power"], 0,
+                 10]], [], [], [], []
 
     @staticmethod
     def off():
@@ -27,13 +28,14 @@ class FakeActivity(App):
 
     def update(self, sys):
         if not sys.sensors["Presence Sensor"].value and self.sunset_time >= sys.rounded_time >= self.sunrise_time:
+            self.counter += 1
+
             if self.cur_state == "start_pending":
                 if self.counter >= self.time_off:
                     self.cur_state = "started"
                     self.counter = 0
-                    return self.on(sys)
+                    self.on(sys)
                 else:
-                    self.counter += 1
                     return self.off()
             else:
                 if self.counter >= self.time_on:
@@ -41,5 +43,7 @@ class FakeActivity(App):
                     self.counter = 0
                     return self.off()
                 else:
-                    self.counter += 1
                     return self.on(sys)
+        elif self.cur_state == "started":
+            return self.off()
+        return [], [], [], [], [], []
