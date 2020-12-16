@@ -95,10 +95,12 @@ sys_.register_device(batteryBackup)
 
 # # # # # APPS # # # # #
 
-batt_backup_man = BatteryBackupManagement(0.115 / (60 * 60 * 1000), 0.2 / (60 * 60 * 1000))
+batt_backup_man = BatteryBackupManagement(
+    0.15 / (60 * 60 * 1000), 0.2 / (60 * 60 * 1000))
 sys_.register_app(batt_backup_man)
 
-energy_man = EnergyManagement(100)
+# Keep total bill under $100, never allow instantaneous power to be greater than $120
+energy_man = EnergyManagement(100, 120 / (30 * 24 * 60 * 60))
 sys_.register_app(energy_man)
 
 fake_act = FakeActivity(19 * 60 * 60, 5 * 60 * 60)

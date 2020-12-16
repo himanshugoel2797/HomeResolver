@@ -2,9 +2,16 @@ class Device:
     name = ""
     states = []  # List of state names
     state_changes = {}
-    resource_changes = {}  # Nested dictionary describing how a given state transition affects global resources
+    # Nested dictionary describing how a given state transition affects global resources
+    resource_changes = {}
     variables = {}  # Dictionary of device variables and their values
     current_state = None  # Current device state name
+
+    @staticmethod
+    def dev_print(msg):
+        GREEN = '\033[92m'  # ANSI color code for green
+        END = '\033[0m'
+        print(GREEN + msg + END)
 
     def __init__(self, init_name, init_states, init_state_changes, init_variables, init_current_state):
         self.name = init_name
@@ -21,7 +28,7 @@ class Device:
             state_change = self.current_state + ":" + target_state_name
             for k, v in self.state_changes.items():
                 if k == state_change:
-                    print ("[%s] %s" % (self.name, v)) # Use value.
+                    Device.dev_print("[%s] %s" % (self.name, v))  # Use value.
             self.current_state = target_state_name
 
     # Set a variable's value

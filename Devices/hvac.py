@@ -2,7 +2,9 @@ from Devices.device import Device
 
 
 class HVAC(Device):
-    temperature_curve = [0, 1 / (2 * 60), 1.3 / (2 * 60), 1.5 / (2 * 60), 2 / (2 * 60)]  # Degrees change per second
+    # Degrees change per second
+    temperature_curve = [0, 1 / (2 * 60), 1.3 /
+                         (2 * 60), 1.5 / (2 * 60), 2 / (2 * 60)]
     energy_curve = [0, 50, 125, 200, 300]
 
     def __init__(self):
@@ -40,7 +42,8 @@ class HVAC(Device):
     def update(self, sys, env):
         cur_vars = self.get_resource_usage(self.current_state, self.variables)
         env.update_power(cur_vars["power"])  # Consume power
-        env.update_temperature(cur_vars["temperature_delta"])  # Update current temperature
+        # Update current temperature
+        env.update_temperature(cur_vars["temperature_delta"])
 
     def transition_state(self, target_state_name):
         parts = target_state_name.split('_')
@@ -50,6 +53,7 @@ class HVAC(Device):
             state_change = self.current_state + ":" + target_state_name
             for k, v in self.state_changes.items():
                 if k == state_change:
-                    print("[%s] %s, lv: %d" % (self.name, v, lv)) # Use value.
+                    # Use value.
+                    Device.dev_print("[%s] %s, lv: %d" % (self.name, v, lv))
             self.current_state = target_state_name
             self.variables["rate"] = lv

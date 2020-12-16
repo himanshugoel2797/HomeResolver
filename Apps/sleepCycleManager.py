@@ -23,7 +23,8 @@ class SleepCycleManager(App):
             if self.transition_counter == 50:
                 self.current_state = "sleep_pending"
 
-            print("[Sleep Cycle Manager] [Blinds] Blinds raised requested")
+            App.app_print(
+                "[Sleep Cycle Manager] [Blinds] Blinds raised requested")
             return [{"device": "Blinds", "target": "raised_%d" % (self.transition_counter / 10)}], \
                    [[0, self.transition_counter / 10, 2]], [], [], [], []
         elif self.current_state == "sleep_pending" and sys.rounded_time >= self.sleep_time:
@@ -37,8 +38,10 @@ class SleepCycleManager(App):
             if self.transition_counter == 50:
                 self.current_state = "sleep_pending"
 
-            print("[Sleep Cycle Manager] [Blinds] Blinds lowered requested")
-            return [{"device":"Blinds", "target":"lowered_%d" % (self.transition_counter / 10)},
+            App.app_print(
+                "[Sleep Cycle Manager] [Blinds] Blinds lowered requested")
+            return [{"device": "Blinds", "target": "lowered_%d" % (self.transition_counter / 10)},
                     {"device": "Indoor Lights", "target": "off"}], \
-                   [[0, self.transition_counter / 10, 5], [0, 10, 0]], [], [], [[0, 1]], []
+                [[0, self.transition_counter / 10, 5],
+                    [0, 10, 0]], [], [], [[0, 1]], []
         return [], [], [], [], [], []

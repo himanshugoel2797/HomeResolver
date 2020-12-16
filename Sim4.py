@@ -99,13 +99,15 @@ sys_.register_device(batteryBackup)
 
 # # # # # APPS # # # # #
 
-batt_backup_man = BatteryBackupManagement(0.115 / (60 * 60 * 1000), 0.2 / (60 * 60 * 1000))
+batt_backup_man = BatteryBackupManagement(
+    0.15 / (60 * 60 * 1000), 0.2 / (60 * 60 * 1000))
 sys_.register_app(batt_backup_man)
 
-energy_man = EnergyManagement(100)
+# tighten limit to $2
+energy_man = EnergyManagement(2, 3 / (2 * 24 * 60 * 60))
 sys_.register_app(energy_man)
 
-fake_act = FakeActivity(19 * 60 * 60, 5 * 60 * 60)
+fake_act = FakeActivity(4 * 60 * 60, 22 * 60 * 60, 15 * 60, 15 * 60)
 sys_.register_app(fake_act)
 
 fire_safety = FireSafety()
@@ -130,3 +132,18 @@ sleep_sec = SleepSecurity()
 sys_.register_app(sleep_sec)
 
 # # # # # SIMULATION # # # # #
+
+# Allow the system to run for a few hundred ticks so the bank can charge
+for _ in range(100):
+    env.update()
+    sys_.process()
+sys_.show_current_state()
+
+# HVAC needs to run
+# Power cost is high
+# Power usage limit is high
+env.presence_detected = True
+env.temperature = 40
+env.set_electricity_rate(0.21 / (60 * 60 * 1000))
+
+update()

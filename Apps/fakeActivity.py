@@ -16,14 +16,14 @@ class FakeActivity(App):
 
     @staticmethod
     def on(sys):
-        print("[Fake Activity] [Indoor Lights] Lights on requested")
+        App.app_print("[Fake Activity] [Indoor Lights] Lights on requested")
         return [{"device": "Indoor Lights", "target": "on"}], \
                [[sys.devices["Indoor Lights"].get_resource_usage("on", None)["power"], 0,
                  10]], [], [], [], []
 
     @staticmethod
     def off():
-        print("[Fake Activity] [Indoor Lights] Lights off requested")
+        App.app_print("[Fake Activity] [Indoor Lights] Lights off requested")
         return [{"device": "Indoor Lights", "target": "off"}], [[0, 0, 10]], [], [], [], []
 
     def update(self, sys):

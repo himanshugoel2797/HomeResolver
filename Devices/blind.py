@@ -11,7 +11,8 @@ class Blind(Device):
         variables = {
             "shutter_amount": 0
         }
-        Device.__init__(self, "Blinds", states, state_changes, variables, "lowered")
+        Device.__init__(self, "Blinds", states,
+                        state_changes, variables, "lowered")
 
     def get_resource_usage(self, state_trans, variables):
         if state_trans.endswith("lowered"):
@@ -37,6 +38,7 @@ class Blind(Device):
             state_change = self.current_state + ":" + target_state_name
             for k, v in self.state_changes.items():
                 if k == state_change:
-                    print("[%s] %s, lv: %d" % (self.name, v, lv))  # Use value.
+                    # Use value.
+                    Device.dev_print("[%s] %s, lv: %d" % (self.name, v, lv))
             self.current_state = target_state_name
             self.variables["shutter_amount"] = lv
