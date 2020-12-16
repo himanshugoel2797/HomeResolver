@@ -79,7 +79,8 @@ class System:
         alt_actions = []
         for app in self.apps.values():
             requested_actions_, weights_, mandatory_actions_, \
-                contradicting_action_pairs_, dependent_action_pairs_, alternative_actions_ = app.update(self)
+                contradicting_action_pairs_, dependent_action_pairs_, alternative_actions_ = app.update(
+                    self)
 
             # Merge action sets
             base_idx = len(requested_actions)
@@ -123,9 +124,12 @@ class System:
 
             # Update conflict indices
             man_actions = [i0 if x in dups else x for x in man_actions]
-            con_action_pairs = [set([i0 if y in dups else y for y in x]) for x in con_action_pairs]
-            dep_action_pairs = [set([i0 if y in dups else y for y in x]) for x in dep_action_pairs]
-            alt_actions = [set([i0 if y in dups else y for y in x]) for x in alt_actions]
+            con_action_pairs = [set([i0 if y in dups else y for y in x])
+                                for x in con_action_pairs]
+            dep_action_pairs = [set([i0 if y in dups else y for y in x])
+                                for x in dep_action_pairs]
+            alt_actions = [set([i0 if y in dups else y for y in x])
+                           for x in alt_actions]
 
         # Remove duplicated actions
         for d in removed_actions:
@@ -182,8 +186,10 @@ class System:
                     act_idx += 1
             constraints.append(c <= self.power_limit)
 
+            print("Power limited to %f W" % (self.power_limit))
+
             self.power_limited = False
-            self.power_limit = 0
+            #self.power_limit = 0
 
         # Define cost function
         cost = None

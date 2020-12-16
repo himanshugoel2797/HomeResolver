@@ -29,7 +29,8 @@ class OutdoorLight(Device):
         elif state_trans.endswith("motionsensor"):
             return {
                 "brightness": variables["level"] * 0.25,
-                "power": variables["level"] * 0.1, #Assume an average power consumption in motion sensor mode
+                # Assume an average power consumption in motion sensor mode
+                "power": variables["level"] * 0.1,
             }
         else:
             return None
@@ -38,7 +39,7 @@ class OutdoorLight(Device):
         cur_vars = self.get_resource_usage(self.current_state, self.variables)
         env.update_power(cur_vars["power"])  # Consume power
         env.add_light(cur_vars["brightness"])  # Update light amount
-        
+
     def transition_state(self, target_state_name):
         parts = target_state_name.split('_')
         lv = int(parts[1])
@@ -47,6 +48,7 @@ class OutdoorLight(Device):
             state_change = self.current_state + ":" + target_state_name
             for k, v in self.state_changes.items():
                 if k == state_change:
-                    print ("[%s] %s, lv: %d" % (self.name, v, lv)) # Use value.
+                    # Use value.
+                    Device.dev_print("[%s] %s, lv: %d" % (self.name, v, lv))
             self.current_state = target_state_name
             self.variables["level"] = lv

@@ -38,7 +38,7 @@ class Environment:
         self.ambient_light_mult = m
 
     def set_electricity_rate(self, r):
-        self.electricity_rate_delta = r
+        self.electricity_rate_delta = r - self.electricity_rate
 
     def update_user_distance(self, d):
         self.user_distance_delta = d
@@ -54,14 +54,16 @@ class Environment:
         self.light = self.light_delta
         self.light_delta = 0
 
-        self.ambient_light = 0.5 * math.sin(self.time * math.pi / (12 * 60 * 60)) + 0.5
+        self.ambient_light = 0.5 * \
+            math.sin(self.time * math.pi / (12 * 60 * 60)) + 0.5
         self.ambient_light += self.ambient_light_delta
         self.ambient_light_delta = 0
 
         self.ambient_light_mult = 1
 
         self.electricity_rate = self.electricity_rate_base * \
-                                (1 + (0.5 * math.sin(self.time * math.pi / (12 * 60 * 60)) + 0.5) * 0.3)
-        
+            (1 + (0.5 * math.sin(self.time * math.pi / (12 * 60 * 60)) + 0.5)
+             * 0.3) + self.electricity_rate_delta
+
         self.user_distance += self.user_distance_delta
         self.user_distance_delta = 0
