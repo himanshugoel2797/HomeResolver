@@ -22,7 +22,8 @@ class HVACPowerControl(App):
                         {"device": "HVAC", "target": "heating_%d" % (i + 1)})
                     resources = sys.devices["HVAC"].get_resource_usage(
                         "heating", {"rate": i + 1})
-                    weights.append([resources["power"], target - cur_temp, 0])
+                    weights.append(
+                        [resources["power"], (target - cur_temp) * (i + 1), 0])
                     alt_actions.append(i)
             elif cur_temp > target:  # Cool
                 App.app_print("[HVAC Power Control] [HVAC] Cooling requested")
@@ -31,7 +32,8 @@ class HVACPowerControl(App):
                         {"device": "HVAC", "target": "cooling_%d" % (i + 1)})
                     resources = sys.devices["HVAC"].get_resource_usage(
                         "cooling", {"rate": i + 1})
-                    weights.append([resources["power"], cur_temp - target, 0])
+                    weights.append(
+                        [resources["power"], (cur_temp - target) * (i + 1), 0])
                     alt_actions.append(i)
             else:
                 return [], [], [], [], [], []
@@ -44,7 +46,8 @@ class HVACPowerControl(App):
                         {"device": "HVAC", "target": "heating_%d" % (i + 1)})
                     resources = sys.devices["HVAC"].get_resource_usage(
                         "heating", {"rate": i + 1})
-                    weights.append([resources["power"], target - cur_temp, 0])
+                    weights.append(
+                        [resources["power"], (target - cur_temp) * (i + 1) * 0.2, 0])
                     alt_actions.append(i)
             elif cur_temp > target:  # Cool
                 for i in range(4):
@@ -52,7 +55,8 @@ class HVACPowerControl(App):
                         {"device": "HVAC", "target": "cooling_%d" % (i + 1)})
                     resources = sys.devices["HVAC"].get_resource_usage(
                         "cooling", {"rate": i + 1})
-                    weights.append([resources["power"], cur_temp - target, 0])
+                    weights.append(
+                        [resources["power"], (cur_temp - target) * (i + 1) * 0.2, 0])
                     alt_actions.append(i)
             else:
                 return [], [], [], [], [], []

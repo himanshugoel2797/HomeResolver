@@ -104,7 +104,7 @@ batt_backup_man = BatteryBackupManagement(
 sys_.register_app(batt_backup_man)
 
 # tighten limit to $2
-energy_man = EnergyManagement(2, 3 / (2 * 24 * 60 * 60))
+energy_man = EnergyManagement(2, 7 / (2 * 24 * 60 * 60))
 sys_.register_app(energy_man)
 
 fake_act = FakeActivity(4 * 60 * 60, 22 * 60 * 60, 15 * 60, 15 * 60)
@@ -144,6 +144,8 @@ sys_.show_current_state()
 # Power usage limit is high
 env.presence_detected = True
 env.temperature = 40
-env.set_electricity_rate(0.21 / (60 * 60 * 1000))
+
+
+env.set_electricity_rate(0.8 / (60 * 60 * 1000))
 
 update()

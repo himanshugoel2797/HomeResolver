@@ -14,12 +14,12 @@ class BatteryBackupManagement(App):
             App.app_print(
                 "[Battery Backup Management] [Battery Backup] Charging requested")
             # charge
-            return [{"device": "Battery Backup", "target": "charging"}], [[sys.devices["Battery Backup"].get_resource_usage("charging", {})["charging_rate"], 2, 1]], [], [], [], []
+            return [{"device": "Battery Backup", "target": "charging"}], [[sys.devices["Battery Backup"].get_resource_usage("charging", {})["charging_rate"], 300, 1]], [], [], [], []
         elif sys.sensors["Power Rate"].get_value() >= self.discharge_cutoff_rate:
             pwr_cons = sys.sensors["Power Meter"].get_value()
             sys.devices["Battery Backup"].variables["consumption"] = pwr_cons
             App.app_print(
                 "[Battery Backup Management] [Battery Backup] Supplying requested")
             # discharge
-            return [{"device": "Battery Backup", "target": "supplying"}], [[-pwr_cons, 0, 0]], [0], [], [], []
+            return [{"device": "Battery Backup", "target": "supplying"}], [[-pwr_cons, 300, 1]], [0], [], [], []
         return [], [], [], [], [], []
