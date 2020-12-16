@@ -102,8 +102,8 @@ batt_backup_man = BatteryBackupManagement(
     0.15 / (60 * 60 * 1000), 0.2 / (60 * 60 * 1000))
 sys_.register_app(batt_backup_man)
 
-# Keep total bill under $100, never allow instantaneous power to be greater than $120
-energy_man = EnergyManagement(100, 120 / (30 * 24 * 60 * 60))
+# Keep total bill under $100, never allow instantaneous power to be greater than $220
+energy_man = EnergyManagement(100, 220 / (30 * 24 * 60 * 60))
 sys_.register_app(energy_man)
 
 fake_act = FakeActivity(4 * 60 * 60, 22 * 60 * 60, 15 * 60, 15 * 60)
