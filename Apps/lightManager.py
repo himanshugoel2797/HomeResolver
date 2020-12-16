@@ -9,9 +9,12 @@ class LightManager(App):
 
     def update(self, sys):
         if self.sunrise_time <= sys.rounded_time <= self.sunset_time:
-            print("[Light Manager] [Indoor Lights] Lights on requested")
+            App.app_print(
+                "[Light Manager] [Indoor Lights] Lights on requested")
             return [{"device": "Indoor Lights", "target": "on"}], \
-                   [[sys.devices["Indoor Lights"].get_resource_usage("on", None)["power"], 8, 10]], [], [], [], []
+                   [[sys.devices["Indoor Lights"].get_resource_usage(
+                       "on", None)["power"], 8, 10]], [], [], [], []
         else:
-            print("[Light Manager] [Indoor Lights] Lights off requested")
+            App.app_print(
+                "[Light Manager] [Indoor Lights] Lights off requested")
             return [{"device": "Indoor Lights", "target": "off"}], [[0, 8, 0]], [], [], [], []

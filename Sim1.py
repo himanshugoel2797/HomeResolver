@@ -81,7 +81,7 @@ sys_.register_sensor(smoke_detector)
 
 doors = Doors()
 sys_.register_device(doors)
-        
+
 hvac = HVAC()
 sys_.register_device(hvac)
 
@@ -99,10 +99,12 @@ sys_.register_device(batteryBackup)
 
 # # # # # APPS # # # # #
 
-batt_backup_man = BatteryBackupManagement(0.115 / (60 * 60 * 1000), 0.2 / (60 * 60 * 1000))
+batt_backup_man = BatteryBackupManagement(
+    0.15 / (60 * 60 * 1000), 0.2 / (60 * 60 * 1000))
 sys_.register_app(batt_backup_man)
 
-energy_man = EnergyManagement(100)
+# Keep total bill under $100, never allow instantaneous power to be greater than $120
+energy_man = EnergyManagement(100, 120 / (30 * 24 * 60 * 60))
 sys_.register_app(energy_man)
 
 fake_act = FakeActivity(19 * 60 * 60, 5 * 60 * 60, 15 * 60, 15 * 60)
@@ -128,10 +130,6 @@ sys_.register_app(sleep_cycle)
 
 sleep_sec = SleepSecurity()
 sys_.register_app(sleep_sec)
-
-# Configure initial sensor values
-# Setup sleep sensor
-# Setup interior temperature to higher than set point
 
 # # # # # SIMULATION # # # # #
 
