@@ -17,9 +17,14 @@ class HVACLocationControl(App):
         alt_actions = []
 
         # assume walking speed
-        time_avail = sys.sensors["User Locator"].get_value() / 1.4  # m/s
+        room = sys.sensors["User Locator"].get_value()
         cur_temp = sys.sensors["Thermometer"].get_value()
         target_temp = sys.target_temperature_present
+
+        if room == "Out of the House":
+            App.app_print("[HVAC Location Control] [HVAC] Off requested")
+            return [{"device": "HVAC", "target": "off"}], [[0, 0, 0]], [], [], [], []
+
         if cur_temp > target_temp:
             # Cooling
             hvac_tot = [time_avail - (cur_temp - target_temp) /

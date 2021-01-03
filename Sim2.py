@@ -7,6 +7,7 @@ from Devices.doors import Doors
 from Devices.hvac import HVAC
 from Devices.indoorLight import IndoorLight
 from Devices.outdoorLight import OutdoorLight
+from Devices.windows import Windows
 
 from Sensors.indoorBrightnessSensor import IndoorBrightnessSensor
 from Sensors.motionSensor import MotionSensor
@@ -96,6 +97,9 @@ sys_.register_device(lightsIndoor)
 
 batteryBackup = BatteryBackup()
 sys_.register_device(batteryBackup)
+
+windows = Windows()
+sys_.register_device(windows)
 
 # # # # # APPS # # # # #
 

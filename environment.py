@@ -16,8 +16,7 @@ class Environment:
     motion_detected = False
     smoke_detected = False
     sleep_detected = False
-    user_distance = 0
-    user_distance_delta = 0
+    user_location = "Living Room"
     electricity_rate_base = 0.115 / (60 * 60 * 1000)
     electricity_rate = 0.115 / (60 * 60 * 1000)  # $0.115/kWh to $/Ws
     electricity_rate_delta = 0
@@ -40,9 +39,6 @@ class Environment:
     def set_electricity_rate(self, r):
         self.electricity_rate_delta = r - self.electricity_rate
 
-    def update_user_distance(self, d):
-        self.user_distance_delta = d
-
     def update(self):
         self.time += 1
         self.temperature += self.temp_delta
@@ -64,6 +60,3 @@ class Environment:
         self.electricity_rate = self.electricity_rate_base * \
             (1 + (0.5 * math.sin(self.time * math.pi / (12 * 60 * 60)) + 0.5)
              * 0.3) + self.electricity_rate_delta
-
-        self.user_distance += self.user_distance_delta
-        self.user_distance_delta = 0

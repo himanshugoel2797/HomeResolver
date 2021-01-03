@@ -6,4 +6,4 @@ class UserLocator(Sensor):
         Sensor.__init__(self, "User Locator", env.user_distance)
 
     def update(self, sys, env):
-        self.value = env.user_distance
+        self.value = env.user_location

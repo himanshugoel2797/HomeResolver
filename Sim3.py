@@ -8,6 +8,7 @@ from Devices.doors import Doors
 from Devices.hvac import HVAC
 from Devices.indoorLight import IndoorLight
 from Devices.outdoorLight import OutdoorLight
+from Devices.windows import Windows
 
 from Sensors.indoorBrightnessSensor import IndoorBrightnessSensor
 from Sensors.motionSensor import MotionSensor
@@ -98,14 +99,17 @@ sys_.register_device(lightsIndoor)
 batteryBackup = BatteryBackup()
 sys_.register_device(batteryBackup)
 
+windows = Windows()
+sys_.register_device(windows)
+
 # # # # # APPS # # # # #
 
 batt_backup_man = BatteryBackupManagement(
     0.15 / (60 * 60 * 1000), 0.2 / (60 * 60 * 1000))
 sys_.register_app(batt_backup_man)
 
-# Keep total bill under $100, never allow instantaneous power to be greater than $120
-energy_man = EnergyManagement(100, 120 / (30 * 24 * 60 * 60))
+# Keep total bill under $100, never allow instantaneous power to be greater than $220
+energy_man = EnergyManagement(100, 220 / (30 * 24 * 60 * 60))
 sys_.register_app(energy_man)
 
 fake_act = FakeActivity(2, 22 * 60 * 60, 1, 1)
