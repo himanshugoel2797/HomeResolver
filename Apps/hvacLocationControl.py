@@ -21,19 +21,15 @@ class HVACLocationControl(App):
         cur_temp = sys.sensors["Thermometer"].get_value()
         target_temp = sys.target_temperature_present
 
+        # Turn A/C off if the resident is not home.
         if room == "Out of the House":
             App.app_print("[HVAC Location Control] [HVAC] Off requested")
             return [{"device": "HVAC", "target": "off"}], [[0, 0, 0]], [], [], [], []
 
         if cur_temp > target_temp:
             # Cooling
-            hvac_tot = [time_avail - (cur_temp - target_temp) /
+            hvac_tot = [-1 * (cur_temp - target_temp) /
                         hvac_props_c[x]["temperature_delta"] for x in range(4)]
-
-            # Don't bother if even the lowest cooling rate leads to wasted power
-            if hvac_tot[0] > 0:
-                App.app_print("[HVAC Location Control] [HVAC] Off requested")
-                return [{"device": "HVAC", "target": "off"}], [[0, 0, 0]], [], [], [], []
 
             App.app_print("[HVAC Location Control] [HVAC] Cooling requested")
             # Adjust penalties based on time difference till target temperature
@@ -48,12 +44,7 @@ class HVACLocationControl(App):
         elif cur_temp < target_temp:
             # Heating
             hvac_tot = [(target_temp - cur_temp) / hvac_props_h[x]
-                        ["temperature_delta"] - time_avail for x in range(4)]
-
-            # Don't bother if even the lowest heating rate leads to wasted power
-            if hvac_tot[0] > 0:
-                App.app_print("[HVAC Location Control] [HVAC] Off requested")
-                return [{"device": "HVAC", "target": "off"}], [[0, 0, 0]], [], [], [], []
+                        ["temperature_delta"] for x in range(4)]
 
             App.app_print("[HVAC Location Control] [HVAC] Heating requested")
             # Adjust penalties based on time difference till target temperature

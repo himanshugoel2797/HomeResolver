@@ -141,6 +141,6 @@ sys_.show_current_state()
 
 env.presence_detected = True
 env.temperature = 40
-env.user_distance = 40
+env.user_location = "Out of the House"
 
 update()
