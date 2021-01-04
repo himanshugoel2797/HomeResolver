@@ -1,33 +1,38 @@
 #!/usr/bin/env python36
 # coding: utf-8
 
-from Devices.hvac import HVAC
+from Devices.batteryBackup import BatteryBackup
 from Devices.blind import Blind
+from Devices.doors import Doors
+from Devices.hvac import HVAC
 from Devices.indoorLight import IndoorLight
 from Devices.outdoorLight import OutdoorLight
-from Devices.batteryBackup import BatteryBackup
-from Devices.doors import Doors
-from Sensors.thermometer import Thermometer
-from Sensors.presenceSensor import PresenceSensor
+from Devices.windows import Windows
+
+from Sensors.indoorBrightnessSensor import IndoorBrightnessSensor
 from Sensors.motionSensor import MotionSensor
+from Sensors.outdoorBrightnessSensor import OutdoorBrightnessSensor
 from Sensors.powerMeter import PowerMeter
 from Sensors.powerRate import PowerRate
-from Sensors.userLocator import UserLocator
-from Sensors.indoorBrightnessSensor import IndoorBrightnessSensor
-from Sensors.outdoorBrightnessSensor import OutdoorBrightnessSensor
-from Sensors.smokeDetector import SmokeDetector
+from Sensors.presenceSensor import PresenceSensor
 from Sensors.sleepSensor import SleepSensor
-from Apps.sleepCycleManager import SleepCycleManager
-from Apps.lightManager import LightManager
-from Apps.sleepSecurity import SleepSecurity
-from Apps.intruderPrevention import IntruderPrevention
+from Sensors.smokeDetector import SmokeDetector
+from Sensors.thermometer import Thermometer
+from Sensors.userLocator import UserLocator
+
+from Apps.batteryBackupManagement import BatteryBackupManagement
+from Apps.energyManagement import EnergyManagement
 from Apps.fakeActivity import FakeActivity
 from Apps.fireSafety import FireSafety
 from Apps.hvacLocationControl import HVACLocationControl
-from Apps.energyManagement import EnergyManagement
-from Apps.batteryBackupManagement import BatteryBackupManagement
 from Apps.hvacPowerControl import HVACPowerControl
+from Apps.intruderPrevention import IntruderPrevention
+from Apps.lightManager import LightManager
+from Apps.sleepCycleManager import SleepCycleManager
+from Apps.sleepSecurity import SleepSecurity
+
 from environment import Environment
+
 from system import System
 
 
@@ -93,6 +98,9 @@ sys_.register_device(lightsIndoor)
 batteryBackup = BatteryBackup()
 sys_.register_device(batteryBackup)
 
+windows = Windows()
+sys_.register_device(windows)
+
 # # # # # APPS # # # # #
 
 batt_backup_man = BatteryBackupManagement(
@@ -103,7 +111,7 @@ sys_.register_app(batt_backup_man)
 energy_man = EnergyManagement(100, 120 / (30 * 24 * 60 * 60))
 sys_.register_app(energy_man)
 
-fake_act = FakeActivity(4 * 60 * 60, 22 * 60 * 60, 15 * 60, 15 * 60)
+fake_act = FakeActivity(6 * 60 * 60, 22 * 60 * 60, 15 * 60, 15 * 60)
 sys_.register_app(fake_act)
 
 fire_safety = FireSafety()
@@ -133,6 +141,6 @@ sys_.show_current_state()
 
 env.presence_detected = True
 env.temperature = 40
-env.user_distance = 40
+env.user_location = "Out of the House"
 
 update()
