@@ -42,7 +42,10 @@ class OutdoorLight(Device):
 
     def transition_state(self, target_state_name):
         parts = target_state_name.split('_')
-        lv = int(parts[1])
+        if len(parts) > 1:
+            lv = int(parts[1])
+        else:
+            lv = 0
         target_state_name = parts[0]
         if self.current_state != target_state_name and target_state_name in self.states:
             state_change = self.current_state + ":" + target_state_name
