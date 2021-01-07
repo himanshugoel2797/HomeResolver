@@ -25,12 +25,27 @@ class SleepCycleManager(App):
                 self.current_state = "sleep_pending"
 
             App.app_print("[Sleep Cycle Manager] [Blinds] Blinds raised requested")
-            actions = [{"device": "Blinds", "target": "raised_%d" % (self.transition_counter / 10)},
-                       {"device": "Indoor Lights", "target": "on"},
-                       {"device": "Windows", "target": "open"}]
-            weights = [[0, self.transition_counter / 10, 0],
-                       [0, self.transition_counter / 10, 0],
-                       [0, self.transition_counter / 10, 0]]
+
+            actions = []
+            weights = []
+
+            all_devs = sys.all_devs_of_type("Blinds_")
+            for dev in all_devs:
+                actions.append(
+                    {"device": dev, "target": "raised_%d" % (self.transition_counter / 10)})
+                weights.append([0, self.transition_counter / 10, 0])
+
+            all_devs = sys.all_devs_of_type("Lights_")
+            for dev in all_devs:
+                actions.append({"device": dev, "target": "on"})
+                weights.append([sys.devices[dev].get_resource_usage("on", None)[
+                               "power"], self.transition_counter / 10, 0])
+
+            all_devs = sys.all_devs_of_type("Windows_")
+            for dev in all_devs:
+                actions.append({"device": dev, "target": "open"})
+                weights.append([0, self.transition_counter / 10, 0])
+
             return actions, weights, [], [], [], []
 
         elif self.current_state == "sleep_pending" and sys.rounded_time >= self.sleep_time:
@@ -52,9 +67,26 @@ class SleepCycleManager(App):
             weights = [[0, self.transition_counter / 10, 2],
                        [0, self.transition_counter / 10, 2],
                        [0, self.transition_counter / 10, 2]]
-            return [{"device": "Blinds", "target": "lowered_%d" % (self.transition_counter / 10)},
-                    {"device": "Indoor Lights", "target": "off"}], \
-                [[0, self.transition_counter / 10, 5],
-                    [0, 10, 0]], [], [], [[0, 1]], []
+
+            actions = []
+            weights = []
+
+            all_devs = sys.all_devs_of_type("Blinds_")
+            for dev in all_devs:
+                actions.append(
+                    {"device": dev, "target": "lowered_%d" % (self.transition_counter / 10)})
+                weights.append([0, self.transition_counter / 10, 0])
+                
+            all_devs = sys.all_devs_of_type("Lights_")
+            for dev in all_devs:
+                actions.append({"device": dev, "target": "off"})
+                weights.append([0, self.transition_counter / 10, 0])
+                
+            all_devs = sys.all_devs_of_type("Windows_")
+            for dev in all_devs:
+                actions.append({"device": dev, "target": "closed"})
+                weights.append([0, self.transition_counter / 10, 0])
+
+            return actions, weights, [], [], [], []
 
         return [], [], [], [], [], []

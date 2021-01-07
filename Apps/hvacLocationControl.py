@@ -22,7 +22,7 @@ class HVACLocationControl(App):
         target_temp = sys.target_temperature_present
 
         # Turn A/C off if the resident is not home.
-        if room == "Out of the House":
+        if room.startswith("outside_"):
             App.app_print("[HVAC Location Control] [HVAC] Off requested")
             return [{"device": "HVAC", "target": "off"}], [[0, 0, 0]], [], [], [], []
 

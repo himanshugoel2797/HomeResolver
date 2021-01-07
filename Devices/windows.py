@@ -2,13 +2,15 @@ from Devices.device import Device
 
 
 class Windows(Device):
-    def __init__(self):
+    win_name = None
+    def __init__(self, name):
         states = ["opened", "closed"]
         state_changes = {
             "opened:closed": "Closed windows requested",
             "closed:opened": "Opened windows requested"
         }
-        Device.__init__(self, "Windows", states, state_changes, {}, "closed")
+        self.win_name = name
+        Device.__init__(self, "Windows_%s"%(name), states, state_changes, {}, "closed")
 
     def get_resource_usage(self, state_trans, variables):
         return {}

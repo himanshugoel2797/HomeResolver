@@ -11,10 +11,25 @@ class LightManager(App):
         if self.sunrise_time <= sys.rounded_time <= self.sunset_time:
             App.app_print(
                 "[Light Manager] [Indoor Lights] Lights on requested")
-            return [{"device": "Indoor Lights", "target": "on"}], \
-                   [[sys.devices["Indoor Lights"].get_resource_usage(
-                       "on", None)["power"], 8, 10]], [], [], [], []
+            act_list = []
+            weight_list = []
+
+            all_devs = sys.all_devs_of_type("Lights_")
+            for dev in all_devs:
+                act_list.append({"device": dev, "target": "on"})
+                weight_list.append([sys.devices[dev].get_resource_usage("on", None)["power"], 8, 10])
+
+            return act_list, weight_list, [], [], [], []
         else:
             App.app_print(
                 "[Light Manager] [Indoor Lights] Lights off requested")
-            return [{"device": "Indoor Lights", "target": "off"}], [[0, 8, 0]], [], [], [], []
+
+            act_list = []
+            weight_list = []
+
+            all_devs = sys.all_devs_of_type("Lights_")
+            for dev in all_devs:
+                act_list.append({"device": dev, "target": "off"})
+                weight_list.append([0, 8, 0])
+
+            return act_list, weight_list, [], [], [], []

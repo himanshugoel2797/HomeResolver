@@ -58,6 +58,33 @@ class System:
 
         return len(new_l) == 1
 
+    def all_action(self, dev_name, target_state, weights, init_idx):
+        act_list = []
+        weight_list = []
+        mandatory_list = []
+
+        for device in self.devices.keys():
+            if device.startswith(dev_name):
+                act_list.append({"device": device, "target": target_state})
+                weight_list.append(weights)
+                mandatory_list.append(init_idx)
+                init_idx += 1
+        return act_list, weight_list, mandatory_list, init_idx
+
+    def all_devs_of_type(self, dev_name):
+        dev_list = []
+        for device in self.devices.keys():
+            if device.startswith(dev_name):
+                dev_list.append(device)
+        return dev_list
+
+    def all_sensors_of_type(self, name):
+        sens_list = []
+        for sensor in self.sensors.keys():
+            if sensor.startswith(name):
+                sens_list.append(sensor)
+        return sens_list
+
     def set_max_power_limit(self, limit):
         if self.power_limited:
             self.power_limit = min(self.power_limit, limit)
