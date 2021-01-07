@@ -1,8 +1,10 @@
 from Sensors.sensor import Sensor
 
 class SleepSensor(Sensor):
-    def __init__(self, env):
-        Sensor.__init__(self, "Sleep Sensor", env.sleep_detected)
+    room_name = None
+    def __init__(self, env, room_name):
+        Sensor.__init__(self, "Sleep Sensor_%s" % (room_name), env.rooms[room_name].sleep_detected)
+        self.room_name = room_name
 
     def update(self, sys, env):
-        self.value = env.sleep_detected
+        self.value = env.rooms[self.room_name].sleep_detected

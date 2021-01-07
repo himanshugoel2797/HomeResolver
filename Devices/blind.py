@@ -2,7 +2,8 @@ from Devices.device import Device
 
 
 class Blind(Device):
-    def __init__(self):
+    name = None
+    def __init__(self, name):
         states = ["raised", "lowered"]
         state_changes = {
             "raised:lowered": "Lower blinds requested",
@@ -11,7 +12,8 @@ class Blind(Device):
         variables = {
             "shutter_amount": 0
         }
-        Device.__init__(self, "Blinds", states,
+        self.name = name
+        Device.__init__(self, "Blinds_%s"%(name), states,
                         state_changes, variables, "lowered")
 
     def get_resource_usage(self, state_trans, variables):
