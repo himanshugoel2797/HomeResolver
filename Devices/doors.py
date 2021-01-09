@@ -28,4 +28,3 @@ class Door(Device):
                 if k == state_change:
                     Device.dev_print("[%s] %s" % (self.name, v))  # Use value.
             self.current_state = target_state_name
-            

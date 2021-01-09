@@ -72,7 +72,6 @@ for room_name in env.room_names:
     smoke_detector = SmokeDetector(env, room_name)
     sys_.register_sensor(smoke_detector)
 
-
     thermometer = Thermometer(env, room_name)
     sys_.register_sensor(thermometer)
 
