@@ -2,12 +2,13 @@ from Devices.device import Device
 
 
 class HVAC(Device):
+    room_name = None
     # Degrees change per second
     temperature_curve = [0, 1 / (2 * 60), 1.3 /
                          (2 * 60), 1.5 / (2 * 60), 2 / (2 * 60)]
     energy_curve = [0, 50, 125, 200, 300]
 
-    def __init__(self):
+    def __init__(self, name):
         states = ["heating", "cooling", "off"]
         state_changes = {
             "off:heating": "Heating requested",
@@ -20,7 +21,8 @@ class HVAC(Device):
         variables = {
             "rate": 1,
         }
-        Device.__init__(self, "HVAC", states, state_changes, variables, "off")
+        Device.__init__(self, "HVAC_%s"%(name), states, state_changes, variables, "off")
+        self.room_name = name
 
     def get_resource_usage(self, state_trans, variables):
         if state_trans.endswith("heating"):
@@ -43,7 +45,7 @@ class HVAC(Device):
         cur_vars = self.get_resource_usage(self.current_state, self.variables)
         env.update_power(cur_vars["power"])  # Consume power
         # Update current temperature
-        env.update_temperature(cur_vars["temperature_delta"])
+        env.rooms[self.room_name].update_temperature(cur_vars["temperature_delta"])
 
     def transition_state(self, target_state_name):
         parts = target_state_name.split('_')
