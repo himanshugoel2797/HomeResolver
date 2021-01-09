@@ -18,13 +18,14 @@ class HVACLocationControl(App):
 
         # assume walking speed
         room = sys.sensors["User Locator"].get_value()
-        cur_temp = sys.sensors["Thermometer"].get_value()
         target_temp = sys.target_temperature_present
 
         # Turn A/C off if the resident is not home.
         if room.startswith("outside_"):
             App.app_print("[HVAC Location Control] [HVAC] Off requested")
             return [{"device": "HVAC", "target": "off"}], [[0, 0, 0]], [], [], [], []
+        else:
+            cur_temp = sys.sensors["Thermometer_%s" % room].get_value()
 
         if cur_temp > target_temp:
             # Cooling
@@ -34,10 +35,8 @@ class HVACLocationControl(App):
             App.app_print("[HVAC Location Control] [HVAC] Cooling requested")
             # Adjust penalties based on time difference till target temperature
             for i in range(4):
-                actions.append(
-                    {"device": "HVAC", "target": "cooling_%d" % (i + 1)})
-                weights.append([hvac_props_c[i]["power"], 5 -
-                                abs(hvac_tot[i] / 30 * 3), 0])
+                actions.append({"device": "HVAC", "target": "cooling_%d" % (i + 1)})
+                weights.append([hvac_props_c[i]["power"], 5 - abs(hvac_tot[i] / 30 * 3), 0])
                 alt_actions.append(i)
             return actions, weights, [], [], [], [alt_actions]
 
@@ -49,10 +48,8 @@ class HVACLocationControl(App):
             App.app_print("[HVAC Location Control] [HVAC] Heating requested")
             # Adjust penalties based on time difference till target temperature
             for i in range(4):
-                actions.append(
-                    {"device": "HVAC", "target": "heating_%d" % (i + 1)})
-                weights.append([hvac_props_h[i]["power"], 5 -
-                                abs(hvac_tot[i] / 30 * 3), 0])
+                actions.append({"device": "HVAC", "target": "heating_%d" % (i + 1)})
+                weights.append([hvac_props_h[i]["power"], 5 - abs(hvac_tot[i] / 30 * 3), 0])
                 alt_actions.append(i)
             return actions, weights, [], [], [], [alt_actions]
 

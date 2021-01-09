@@ -10,7 +10,7 @@ class IndoorLight(Device):
             "on:off": "Lights off requested",
         }
         self.room_name = name
-        Device.__init__(self, "Lights_%s"%(name), states, state_changes, {}, "off")
+        Device.__init__(self, "Lights_%s" % (name), states, state_changes, {}, "off")
 
     def get_resource_usage(self, state_trans, variables):
         if state_trans.endswith("on"):
