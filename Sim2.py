@@ -89,15 +89,15 @@ for room_name in env.room_names:
     lightsIndoor = IndoorLight(room_name)
     sys_.register_device(lightsIndoor)
 
+    hvac = HVAC(room_name)
+    sys_.register_device(hvac)
+
     if env.rooms[room_name].has_window():
         windows = Windows(room_name)
         sys_.register_device(windows)
 
         blinds = Blind(room_name)
         sys_.register_device(blinds)
-
-hvac = HVAC()
-sys_.register_device(hvac)
 
 lightsOutdoor = OutdoorLight("Outdoor Lights")
 sys_.register_device(lightsOutdoor)
