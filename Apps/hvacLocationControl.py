@@ -6,18 +6,16 @@ class HVACLocationControl(App):
         App.__init__(self, "HVAC Location Control")
 
     def update(self, sys):
-        # Compute distance vs target temperature time to determine target heating/cooling rate
-        hvac_props_h = [sys.devices["HVAC"].get_resource_usage(
-            "heating", {"rate": x + 1}) for x in range(4)]
-        hvac_props_c = [sys.devices["HVAC"].get_resource_usage(
-            "cooling", {"rate": x + 1}) for x in range(4)]
+        room = sys.sensors["User Locator"].get_value()
+        if not room.startswith("outside"):
+            # Compute distance vs target temperature time to determine target heating/cooling rate
+            hvac_props_h = [sys.devices["HVAC_%s" % room].get_resource_usage("heating", {"rate": x + 1}) for x in range(4)]
+            hvac_props_c = [sys.devices["HVAC_%s" % room].get_resource_usage("cooling", {"rate": x + 1}) for x in range(4)]
 
         actions = []
         weights = []
         alt_actions = []
 
-        # assume walking speed
-        room = sys.sensors["User Locator"].get_value()
         target_temp = sys.target_temperature_present
 
         # Turn A/C off if the resident is not home.

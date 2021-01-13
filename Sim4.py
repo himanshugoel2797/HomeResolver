@@ -1,13 +1,14 @@
 #!/usr/bin/env python36
 # coding: utf-8
 
+
 from Devices.batteryBackup import BatteryBackup
 from Devices.blind import Blind
-from Devices.doors import Doors
+from Devices.door import Door
 from Devices.hvac import HVAC
 from Devices.indoorLight import IndoorLight
 from Devices.outdoorLight import OutdoorLight
-from Devices.windows import Windows
+from Devices.window import Window
 
 from Sensors.indoorBrightnessSensor import IndoorBrightnessSensor
 from Sensors.motionSensor import MotionSensor
@@ -47,18 +48,8 @@ env = Environment()
 sys_ = System(env)
 
 # # # # # SENSORS # # # # #
-
-human_presence_sensor = PresenceSensor(env)
-sys_.register_sensor(human_presence_sensor)
-
-thermometer = Thermometer(env)
-sys_.register_sensor(thermometer)
-
 outdoor_motion_detector = MotionSensor(env)
 sys_.register_sensor(outdoor_motion_detector)
-
-sleep_detector = SleepSensor(env)
-sys_.register_sensor(sleep_detector)
 
 power_meter = PowerMeter(env)
 sys_.register_sensor(power_meter)
@@ -69,37 +60,51 @@ sys_.register_sensor(power_rate)
 user_locator = UserLocator(env)
 sys_.register_sensor(user_locator)
 
-indoor_brightness = IndoorBrightnessSensor(env)
-sys_.register_sensor(indoor_brightness)
-
 outdoor_brightness = OutdoorBrightnessSensor(env)
 sys_.register_sensor(outdoor_brightness)
 
-smoke_detector = SmokeDetector(env)
-sys_.register_sensor(smoke_detector)
+human_presence_sensor = PresenceSensor(env)
+sys_.register_sensor(human_presence_sensor)
+
+for room_name in env.room_names:
+    indoor_brightness = IndoorBrightnessSensor(env, room_name)
+    sys_.register_sensor(indoor_brightness)
+
+    smoke_detector = SmokeDetector(env, room_name)
+    sys_.register_sensor(smoke_detector)
+
+    thermometer = Thermometer(env, room_name)
+    sys_.register_sensor(thermometer)
+
+    if room_name.startswith("bedroom"):
+        sleep_detector = SleepSensor(env, room_name)
+        sys_.register_sensor(sleep_detector)
 
 # # # # # DEVICES # # # # #
 
-doors = Doors()
-sys_.register_device(doors)
+for door_name in env.door_names:
+    door = Door(door_name)
+    sys_.register_device(door)
 
-hvac = HVAC()
-sys_.register_device(hvac)
+for room_name in env.room_names:
+    lightsIndoor = IndoorLight(room_name)
+    sys_.register_device(lightsIndoor)
 
-blinds = Blind()
-sys_.register_device(blinds)
+    hvac = HVAC(room_name)
+    sys_.register_device(hvac)
+
+    if env.rooms[room_name].has_window():
+        windows = Window(room_name)
+        sys_.register_device(windows)
+
+        blinds = Blind(room_name)
+        sys_.register_device(blinds)
 
 lightsOutdoor = OutdoorLight("Outdoor Lights")
 sys_.register_device(lightsOutdoor)
 
-lightsIndoor = IndoorLight("Indoor Lights")
-sys_.register_device(lightsIndoor)
-
 batteryBackup = BatteryBackup()
 sys_.register_device(batteryBackup)
-
-windows = Windows()
-sys_.register_device(windows)
 
 # # # # # APPS # # # # #
 

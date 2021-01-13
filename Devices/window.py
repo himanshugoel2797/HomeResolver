@@ -1,7 +1,7 @@
 from Devices.device import Device
 
 
-class Windows(Device):
+class Window(Device):
     win_name = None
     def __init__(self, name):
         states = ["opened", "closed"]
