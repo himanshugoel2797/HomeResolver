@@ -16,6 +16,8 @@ class HVACPowerControl(App):
         weights = []
         alt_actions = []
 
+        hvacs = sys.all_devs_of_type("HVAC")
+
         if present:
             target = sys.target_temperature_present
         else:
@@ -23,16 +25,20 @@ class HVACPowerControl(App):
         for i in range(len(cur_temp)):
             if cur_temp[i] < target:  # Heat
                 for j in range(4):
-                    actions.append({"device": "HVAC", "target": "heating_%d" % (j + 1)})
-                    resources = sys.devices["HVAC"].get_resource_usage("heating", {"rate": j + 1})
-                    weights.append([resources["power"], (target - cur_temp[i]) * (j + 1) * 0.2, 0])
-                    alt_actions.append(i * 4 + j)
+                    for k in range(len(hvacs)):
+                        room_name = hvacs[k]
+                        actions.append({"device": "HVAC_%s" % (room_name), "target": "heating_%d" % (j + 1)})
+                        resources = sys.devices["HVAC_%s" % (room_name)].get_resource_usage("heating", {"rate": j + 1})
+                        weights.append([resources["power"], (target - cur_temp[i]) * (j + 1) * 0.2, 0])
+                        alt_actions.append(i * 4 * len(hvacs) + j * len(hvacs) + k)
             elif cur_temp[i] > target:  # Cool
                 for j in range(4):
-                    actions.append({"device": "HVAC", "target": "cooling_%d" % (j + 1)})
-                    resources = sys.devices["HVAC"].get_resource_usage("cooling", {"rate": j + 1})
-                    weights.append([resources["power"], (cur_temp[i] - target) * (j + 1) * 0.2, 0])
-                    alt_actions.append(i * 4 + j)
+                    for k in range(len(hvacs)):
+                        room_name = hvacs[k]
+                        actions.append({"device": "HVAC_%s" % (room_name), "target": "cooling_%d" % (j + 1)})
+                        resources = sys.devices["HVAC_%s" % (room_name)].get_resource_usage("cooling", {"rate": j + 1})
+                        weights.append([resources["power"], (cur_temp[i] - target) * (j + 1) * 0.2, 0])
+                        alt_actions.append(i * 4 * len(hvacs) + j * len(hvacs) + k)
         if len(alt_actions) > 0:
             return actions, weights, [], [], [], [alt_actions]
         return actions, weights, [], [], [], []

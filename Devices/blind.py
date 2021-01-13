@@ -2,7 +2,7 @@ from Devices.device import Device
 
 
 class Blind(Device):
-    name = None
+    room_name = None
     def __init__(self, name):
         states = ["raised", "lowered"]
         state_changes = {
@@ -12,7 +12,7 @@ class Blind(Device):
         variables = {
             "shutter_amount": 0
         }
-        self.name = name
+        self.room_name = name
         Device.__init__(self, "Blinds_%s"%(name), states,
                         state_changes, variables, "lowered")
 
@@ -30,7 +30,7 @@ class Blind(Device):
 
     def update(self, sys, env):
         cur_vars = self.get_resource_usage(self.current_state, self.variables)
-        env.rooms[self.name].set_ambient_light_mult(cur_vars["brightness_mult"])
+        env.rooms[self.room_name].set_ambient_light_mult(cur_vars["brightness_mult"])
 
     def transition_state(self, target_state_name):
         parts = target_state_name.split('_')
