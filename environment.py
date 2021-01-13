@@ -35,6 +35,7 @@ class Room:
     smoke_detected = False
     sleep_detected = False
     presence_detected = False
+    ambient_light_mult = 1
 
     doors = {}  # Names of rooms the doors connect to
     windows = []  # List of windows
@@ -60,6 +61,9 @@ class Room:
     def add_window(self):
         self.windows.append(False)
 
+    def set_ambient_light_mult(self, m):
+        self.ambient_light_mult = m
+
     def update_temperature(self, delta):
         self.temp_delta += delta
 
@@ -71,11 +75,11 @@ class Room:
         self.temperature += self.temp_delta
         self.temp_delta = 0
 
-        self.light = self.light_delta
+        # Normalize temperatures and lighting with outside state when windows open
+        self.light = self.light_delta + self.env.ambient_light * self.ambient_light_mult
         self.light_delta = 0
 
         # TODO Gradually normalize temperatures between neighboring rooms when doors are open
-        # TODO Similarly normalize temperatures and lighting with outside state when windows open
 
 class Environment:
     time = 0
@@ -86,7 +90,6 @@ class Environment:
     electricity_rate_delta = 0
     ambient_light = 0
     ambient_light_delta = 0
-    ambient_light_mult = 1
 
     rooms = {}
     room_names = []
@@ -149,11 +152,8 @@ class Environment:
     def set_electricity_rate(self, r):
         self.electricity_rate_delta = r - self.electricity_rate
 
-    def set_ambient_light_mult(self, m):
-        self.ambient_light_mult = m
-
     def add_light(self, l):
-        self.ambient_light += l
+        self.ambient_light_delta += l
 
     def update(self):
         self.time += 1
@@ -164,8 +164,6 @@ class Environment:
             math.sin(self.time * math.pi / (12 * 60 * 60)) + 0.5
         self.ambient_light += self.ambient_light_delta
         self.ambient_light_delta = 0
-
-        self.ambient_light_mult = 1
 
         self.electricity_rate = self.electricity_rate_base * \
             (1 + (0.5 * math.sin(self.time * math.pi / (12 * 60 * 60)) + 0.5)

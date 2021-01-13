@@ -30,7 +30,7 @@ class Blind(Device):
 
     def update(self, sys, env):
         cur_vars = self.get_resource_usage(self.current_state, self.variables)
-        env.set_ambient_light_mult(cur_vars["brightness_mult"])
+        env.rooms[self.name].set_ambient_light_mult(cur_vars["brightness_mult"])
 
     def transition_state(self, target_state_name):
         parts = target_state_name.split('_')
