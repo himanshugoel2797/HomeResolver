@@ -1,13 +1,14 @@
 #!/usr/bin/env python36
 # coding: utf-8
 
+
 from Devices.batteryBackup import BatteryBackup
 from Devices.blind import Blind
-from Devices.doors import Door
+from Devices.door import Door
 from Devices.hvac import HVAC
 from Devices.indoorLight import IndoorLight
 from Devices.outdoorLight import OutdoorLight
-from Devices.windows import Windows
+from Devices.window import Window
 
 from Sensors.indoorBrightnessSensor import IndoorBrightnessSensor
 from Sensors.motionSensor import MotionSensor
@@ -93,7 +94,7 @@ for room_name in env.room_names:
     sys_.register_device(hvac)
 
     if env.rooms[room_name].has_window():
-        windows = Windows(room_name)
+        windows = Window(room_name)
         sys_.register_device(windows)
 
         blinds = Blind(room_name)

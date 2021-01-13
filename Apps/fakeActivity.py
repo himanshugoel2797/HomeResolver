@@ -18,30 +18,29 @@ class FakeActivity(App):
     def on(sys):
         App.app_print("[Fake Activity] [Indoor Lights] Lights on requested")
 
-        act_list = []
-        weight_list = []
+        actions = []
+        weights = []
 
         all_devs = sys.all_devs_of_type("Lights_")
         for dev in all_devs:
-            act_list.append({"device": dev, "target": "on"})
-            weight_list.append([sys.devices[dev].get_resource_usage("on", None)["power"], 0, 5])
+            actions.append({"device": dev, "target": "on"})
+            weights.append([sys.devices[dev].get_resource_usage("on", None)["power"], 0, 5])
 
-        return act_list, weight_list, [], [], [], []
+        return actions, weights, [], [], [], []
 
     @staticmethod
     def off(sys):
         App.app_print("[Fake Activity] [Indoor Lights] Lights off requested")
 
-        act_list = []
-        weight_list = []
+        actions = []
+        weights = []
 
         all_devs = sys.all_devs_of_type("Lights_")
         for dev in all_devs:
-            act_list.append({"device": dev, "target": "off"})
-            weight_list.append(
-                [0, 0, 3])
+            actions.append({"device": dev, "target": "off"})
+            weights.append([0, 0, 3])
 
-        return act_list, weight_list, [], [], [], []
+        return actions, weights, [], [], [], []
 
     def update(self, sys):
         if not sys.sensors["Presence Sensor"].value and self.sunset_time >= sys.rounded_time >= self.sunrise_time:

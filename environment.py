@@ -1,5 +1,6 @@
 import math
 
+
 class DoorNode:
     door_open = False
     door_locked = False
@@ -24,6 +25,7 @@ class DoorNode:
     def unlock(self):
         self.door_locked = False
 
+
 class Room:
     temperature = 20
     time = 0  # in seconds
@@ -34,8 +36,8 @@ class Room:
     sleep_detected = False
     presence_detected = False
 
-    doors = {} #Names of rooms the doors connect to
-    windows = [] #List of windows
+    doors = {}  # Names of rooms the doors connect to
+    windows = []  # List of windows
 
     def __init__(self, name, env):
         self.name = name
@@ -72,8 +74,8 @@ class Room:
         self.light = self.light_delta
         self.light_delta = 0
 
-        #TODO Gradually normalize temperatures between neighboring rooms when doors are open
-        #TODO Similarly normalize temperatures and lighting with outside state when windows open
+        # TODO Gradually normalize temperatures between neighboring rooms when doors are open
+        # TODO Similarly normalize temperatures and lighting with outside state when windows open
 
 class Environment:
     time = 0
@@ -95,7 +97,7 @@ class Environment:
     motion_detected = False
 
     def __init__(self):
-        #Setup rooms, doors and windows
+        # Setup rooms, doors and windows
         bd0 = Room("bedroom0", self)
         bd0.add_window()
         
@@ -146,6 +148,12 @@ class Environment:
 
     def set_electricity_rate(self, r):
         self.electricity_rate_delta = r - self.electricity_rate
+
+    def set_ambient_light_mult(self, m):
+        self.ambient_light_mult = m
+
+    def add_light(self, l):
+        self.ambient_light += l
 
     def update(self):
         self.time += 1

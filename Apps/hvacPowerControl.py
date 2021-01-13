@@ -33,4 +33,6 @@ class HVACPowerControl(App):
                     resources = sys.devices["HVAC"].get_resource_usage("cooling", {"rate": j + 1})
                     weights.append([resources["power"], (cur_temp[i] - target) * (j + 1) * 0.2, 0])
                     alt_actions.append(i * 4 + j)
-        return actions, weights, [], [], [], [alt_actions]
+        if len(alt_actions) > 0:
+            return actions, weights, [], [], [], [alt_actions]
+        return actions, weights, [], [], [], []
