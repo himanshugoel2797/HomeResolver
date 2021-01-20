@@ -1,11 +1,10 @@
-from Sensors.sensor import Sensor
+from Sensors.singleRoomSensor import SingleRoomSensor
 
 
-class IndoorBrightnessSensor(Sensor):
-    room_name = None
+class IndoorBrightnessSensor(SingleRoomSensor):
     def __init__(self, env, room_name):
-        Sensor.__init__(self, "Indoor Brightness Sensor_%s"%(room_name), env.rooms[room_name].light)
-        self.room_name = room_name
+        SingleRoomSensor.__init__(self,
+                                  "Indoor Brightness Sensor_%s" % (room_name), env.rooms[room_name].light, room_name)
 
     def update(self, sys, env):
         self.value = env.rooms[self.room_name].light

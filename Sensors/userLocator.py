@@ -7,8 +7,8 @@ class UserLocator(Sensor):
 
     def update(self, sys, env):
         if env.presence_detected:
-            #Check all rooms
-            for k,v in env.rooms.items():
+            # Check all rooms
+            for k, v in env.rooms.items():
                 if v.presence_detected:
                     self.value = k
                     break
